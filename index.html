@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>5초 준다! - 2 Player</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(circle at 50% 0%,#293142 0%,#0b0e15 48%,#05070b 100%);
+    color:#fff;
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.app{
+    width:min(94vw,680px);
+    padding:20px 0 30px;
+}
+
+/* HEADER */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:900;
+}
+
+.logo span{
+    color:#ffb52e;
+}
+
+.mode{
+    font-size:10px;
+    letter-spacing:2px;
+    color:#727c8f;
+}
+
+/* PLAYERS */
+
+.players{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.player{
+    padding:15px 12px;
+    border-radius:17px;
+    background:rgba(18,23,32,.9);
+    border:1px solid rgba(255,255,255,.07);
+    text-align:center;
+    transition:.25s;
+}
+
+.player.active{
+    border-color:#ffb52e;
+    background:rgba(255,181,46,.07);
+    box-shadow:
+        0 0 25px rgba(255,181,46,.12),
+        inset 0 0 20px rgba(255,181,46,.03);
+}
+
+.player-name{
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:2px;
+    color:#7d8799;
+    margin-bottom:5px;
+}
+
+.player.active .player-name{
+    color:#ffb52e;
+}
+
+.player-score{
+    font-size:30px;
+    font-weight:900;
+}
+
+/* CARD */
+
+.card{
+    position:relative;
+    min-height:590px;
+    padding:27px;
+    border-radius:28px;
+    background:
+        linear-gradient(145deg,#1d2330,#0d1119);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 30px 80px rgba(0,0,0,.5);
+    text-align:center;
+    overflow:hidden;
+}
+
+.card::before{
+    content:"";
+    position:absolute;
+    width:280px;
+    height:280px;
+    left:50%;
+    top:-170px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:rgba(255,181,46,.08);
+    filter:blur(70px);
+}
+
+/* TURN */
+
+.turn{
+    position:relative;
+    font-size:11px;
+    color:#ffb52e;
+    letter-spacing:2px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+/* QUESTION */
+
+.question{
+    position:relative;
+    min-height:85px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:clamp(24px,6vw,35px);
+    line-height:1.25;
+    font-weight:900;
+    letter-spacing:-1px;
+    word-break:keep-all;
+}
+
+/*
+   시작 전에는 완전히 빈 공간.
+   글자도 없고, 배경도 없음.
+*/
+
+.question.hidden{
+    color:transparent;
+    font-size:0;
+}
+
+/* TIMER */
+
+.timer-wrap{
+    width:220px;
+    height:220px;
+    margin:23px auto;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.ring{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    padding:5px;
+
+    background:
+        conic-gradient(
+            #ffb52e var(--progress,0deg),
+            rgba(255,255,255,.05) var(--progress,0deg)
+        );
+}
+
+.ring::after{
+    content:"";
+    position:absolute;
+    inset:5px;
+    border-radius:50%;
+    background:#10141c;
+}
+
+.timer{
+    position:relative;
+    z-index:2;
+    font-size:66px;
+    font-weight:900;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:-3px;
+}
+
+.unit{
+    position:absolute;
+    z-index:3;
+    bottom:47px;
+    color:#687285;
+    font-size:9px;
+    letter-spacing:3px;
+}
+
+/* BUTTON */
+
+.controls{
+    position:relative;
+    display:flex;
+    justify-content:center;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    color:#fff;
+    font-family:inherit;
+    font-weight:800;
+    transition:.15s;
+}
+
+button:active{
+    transform:scale(.96);
+}
+
+.start{
+    width:230px;
+    height:54px;
+    border-radius:15px;
+    background:
+        linear-gradient(135deg,#ffb52e,#ff7d20);
+    box-shadow:
+        0 10px 30px rgba(255,150,40,.2);
+}
+
+.start:hover{
+    filter:brightness(1.1);
+    transform:translateY(-2px);
+}
+
+/* RESULT */
+
+.result{
+    display:none;
+    margin-top:18px;
+}
+
+.result.show{
+    display:block;
+}
+
+.result p{
+    color:#8d96a7;
+    font-size:12px;
+    margin-bottom:12px;
+}
+
+.result-buttons{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.result button{
+    height:47px;
+    border-radius:13px;
+    padding:0 27px;
+}
+
+.success{
+    background:#46d89b;
+    color:#06150e;
+}
+
+.fail{
+    background:rgba(255,80,95,.12);
+    border:1px solid rgba(255,80,95,.3);
+    color:#ff737e;
+}
+
+/* NEXT */
+
+.next{
+    margin-top:14px;
+    height:48px;
+    padding:0 35px;
+    border-radius:13px;
+    background:#252c39;
+    display:none;
+}
+
+.next.show{
+    display:inline-block;
+}
+
+.help{
+    margin-top:15px;
+    text-align:center;
+    color:#596376;
+    font-size:10px;
+}
+
+/* COUNTDOWN */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(4,6,10,.86);
+    backdrop-filter:blur(12px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.count{
+    font-size:150px;
+    font-weight:1000;
+    color:#ffb52e;
+    text-shadow:
+        0 0 50px rgba(255,181,46,.5);
+}
+
+/* END */
+
+.end{
+    position:fixed;
+    inset:0;
+    background:rgba(4,6,10,.86);
+    backdrop-filter:blur(15px);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:200;
+    padding:20px;
+}
+
+.end.show{
+    display:flex;
+}
+
+.endbox{
+    width:min(90vw,430px);
+    padding:38px 25px;
+    text-align:center;
+    border-radius:27px;
+    background:#151a24;
+    border:1px solid rgba(255,255,255,.1);
+    box-shadow:0 30px 100px rgba(0,0,0,.6);
+}
+
+.trophy{
+    font-size:58px;
+    margin-bottom:12px;
+}
+
+.endbox h1{
+    font-size:31px;
+    margin-bottom:10px;
+}
+
+.endbox p{
+    color:#8b94a5;
+    line-height:1.7;
+    margin-bottom:23px;
+}
+
+.restart{
+    width:100%;
+    height:52px;
+    border-radius:14px;
+    background:
+        linear-gradient(135deg,#ffb52e,#ff7d20);
+}
+
+/* EFFECTS */
+
+.shake{
+    animation:shake .35s;
+}
+
+@keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+}
+
+.flash{
+    animation:flash .5s ease;
+}
+
+@keyframes flash{
+    50%{
+        box-shadow:
+            0 0 0 3px rgba(70,216,155,.4),
+            0 0 80px rgba(70,216,155,.25);
+    }
+}
+
+@media(max-width:500px){
+
+    .app{
+        width:94vw;
+    }
+
+    .card{
+        min-height:550px;
+        padding:20px;
+        border-radius:23px;
+    }
+
+    .timer-wrap{
+        width:190px;
+        height:190px;
+    }
+
+    .timer{
+        font-size:57px;
+    }
+
+    .unit{
+        bottom:41px;
+    }
+
+    .question{
+        font-size:25px;
+    }
+
+    .player-score{
+        font-size:26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="header">
+        <div class="logo">
+            5초 <span>준다!</span>
+        </div>
+
+        <div class="mode">
+            2 PLAYER
+        </div>
+    </div>
+
+
+    <!-- 점수판 -->
+
+    <div class="players">
+
+        <div class="player active" id="player1Box">
+
+            <div class="player-name">
+                PLAYER 1
+            </div>
+
+            <div class="player-score" id="score1">
+                0
+            </div>
+
+        </div>
+
+
+        <div class="player" id="player2Box">
+
+            <div class="player-name">
+                PLAYER 2
+            </div>
+
+            <div class="player-score" id="score2">
+                0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 게임 -->
+
+    <div class="card" id="card">
+
+        <div class="turn" id="turn">
+            PLAYER 1 차례
+        </div>
+
+
+        <!--
+            시작 전에는 아무 글자도 없음.
+            문제는 JS에서 카운트다운이 끝난 뒤
+            처음 생성된다.
+        -->
+
+        <div class="question hidden" id="question"></div>
+
+
+        <!-- TIMER -->
+
+        <div class="timer-wrap">
+
+            <div class="ring" id="ring"></div>
+
+            <div class="timer" id="timer">
+                5.00
+            </div>
+
+            <div class="unit">
+                SECONDS
+            </div>
+
+        </div>
+
+
+        <!-- START -->
+
+        <div class="controls">
+
+            <button class="start" id="startBtn">
+                도전 시작
+            </button>
+
+        </div>
+
+
+        <!-- RESULT -->
+
+        <div class="result" id="result">
+
+            <p>
+                5초 안에 3개를 말했다면 성공!
+            </p>
+
+            <div class="result-buttons">
+
+                <button
+                    class="success"
+                    id="successBtn">
+                    ✓ 성공
+                </button>
+
+                <button
+                    class="fail"
+                    id="failBtn">
+                    ✕ 실패
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- NEXT -->
+
+        <button
+            class="next"
+            id="nextBtn">
+
+            다음 문제 →
+
+        </button>
+
+    </div>
+
+
+    <div class="help">
+        5초 안에 제시된 주제의 답 3개를 말하세요
+    </div>
+
+</div>
+
+
+<!-- COUNTDOWN -->
+
+<div class="overlay" id="countdown">
+
+    <div class="count" id="countNumber">
+        3
+    </div>
+
+</div>
+
+
+<!-- GAME END -->
+
+<div class="end" id="end">
+
+    <div class="endbox">
+
+        <div class="trophy">
+            🏆
+        </div>
+
+        <h1 id="winner">
+            게임 종료!
+        </h1>
+
+        <p id="finalScore"></p>
+
+        <button
+            class="restart"
+            id="restartBtn">
+
+            다시 플레이
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   문제 100개
+========================================= */
+
+const questions = [
+
+"동물 3가지를 말하세요!",
+"과일 3가지를 말하세요!",
+"음식 3가지를 말하세요!",
+"나라 3곳을 말하세요!",
+"게임 3가지를 말하세요!",
+"운동 3가지를 말하세요!",
+"색깔 3가지를 말하세요!",
+"음료 3가지를 말하세요!",
+"학교에서 볼 수 있는 것 3가지를 말하세요!",
+"탈것 3가지를 말하세요!",
+
+"전자기기 3가지를 말하세요!",
+"편의점에서 살 수 있는 것 3가지를 말하세요!",
+"겨울에 생각나는 것 3가지를 말하세요!",
+"여름에 생각나는 것 3가지를 말하세요!",
+"주방에서 볼 수 있는 것 3가지를 말하세요!",
+"영화 장르 3가지를 말하세요!",
+"직업 3가지를 말하세요!",
+"악기 3가지를 말하세요!",
+"하늘에서 볼 수 있는 것 3가지를 말하세요!",
+"바다에서 볼 수 있는 것 3가지를 말하세요!",
+
+"문구류 3가지를 말하세요!",
+"집에서 찾을 수 있는 것 3가지를 말하세요!",
+"빨간색인 것 3가지를 말하세요!",
+"둥근 것 3가지를 말하세요!",
+"학교 과목 3가지를 말하세요!",
+"한국 음식 3가지를 말하세요!",
+"아침에 하는 일 3가지를 말하세요!",
+"주말에 할 수 있는 것 3가지를 말하세요!",
+"스마트폰으로 할 수 있는 것 3가지를 말하세요!",
+"인터넷에서 할 수 있는 것 3가지를 말하세요!",
+
+"만화에 나올 법한 캐릭터 3가지를 말하세요!",
+"슈퍼히어로 3명을 말하세요!",
+"공포영화에 나오는 것 3가지를 말하세요!",
+"학교에 가져가는 것 3가지를 말하세요!",
+"비 오는 날 필요한 것 3가지를 말하세요!",
+"여행 갈 때 챙기는 것 3가지를 말하세요!",
+"생일에 받으면 좋은 것 3가지를 말하세요!",
+"아이스크림 맛 3가지를 말하세요!",
+"피자 토핑 3가지를 말하세요!",
+"라면에 넣을 수 있는 것 3가지를 말하세요!",
+
+"빵 종류 3가지를 말하세요!",
+"과자 3가지를 말하세요!",
+"초콜릿 종류 3가지를 말하세요!",
+"패스트푸드 메뉴 3가지를 말하세요!",
+"카페에서 주문할 수 있는 것 3가지를 말하세요!",
+"과일 맛 음료 3가지를 말하세요!",
+"한국의 도시 3곳을 말하세요!",
+"해외 도시 3곳을 말하세요!",
+"유명한 랜드마크 3개를 말하세요!",
+"공원에서 볼 수 있는 것 3가지를 말하세요!",
+
+"교통수단 3가지를 말하세요!",
+"자동차 브랜드 3개를 말하세요!",
+"게임기 3가지를 말하세요!",
+"컴퓨터 부품 3가지를 말하세요!",
+"인터넷 브라우저 3가지를 말하세요!",
+"SNS 3가지를 말하세요!",
+"메신저 앱 3가지를 말하세요!",
+"유튜브 콘텐츠 3가지를 말하세요!",
+"사진을 찍을 만한 것 3가지를 말하세요!",
+"가전제품 3가지를 말하세요!",
+
+"침실에서 볼 수 있는 것 3가지를 말하세요!",
+"욕실에서 볼 수 있는 것 3가지를 말하세요!",
+"거실에서 볼 수 있는 것 3가지를 말하세요!",
+"교실에 있는 것 3가지를 말하세요!",
+"운동장에서 볼 수 있는 것 3가지를 말하세요!",
+"도서관에서 볼 수 있는 것 3가지를 말하세요!",
+"마트에서 살 수 있는 것 3가지를 말하세요!",
+"놀이공원에서 볼 수 있는 것 3가지를 말하세요!",
+"해변에서 볼 수 있는 것 3가지를 말하세요!",
+"산에서 볼 수 있는 것 3가지를 말하세요!",
+
+"빨리 달리는 것 3가지를 말하세요!",
+"느리게 움직이는 것 3가지를 말하세요!",
+"소리가 큰 것 3가지를 말하세요!",
+"조용한 곳 3가지를 말하세요!",
+"차가운 것 3가지를 말하세요!",
+"뜨거운 것 3가지를 말하세요!",
+"무거운 것 3가지를 말하세요!",
+"가벼운 것 3가지를 말하세요!",
+"큰 것 3가지를 말하세요!",
+"작은 것 3가지를 말하세요!",
+
+"파란색인 것 3가지를 말하세요!",
+"초록색인 것 3가지를 말하세요!",
+"노란색인 것 3가지를 말하세요!",
+"검은색인 것 3가지를 말하세요!",
+"하얀색인 것 3가지를 말하세요!",
+"네모난 것 3가지를 말하세요!",
+"길쭉한 것 3가지를 말하세요!",
+"부드러운 것 3가지를 말하세요!",
+"딱딱한 것 3가지를 말하세요!",
+"반짝이는 것 3가지를 말하세요!",
+
+"쉬는 시간에 할 수 있는 것 3가지를 말하세요!",
+"방학에 할 수 있는 것 3가지를 말하세요!",
+"친구와 할 수 있는 것 3가지를 말하세요!",
+"혼자 할 수 있는 취미 3가지를 말하세요!",
+"선물로 줄 수 있는 것 3가지를 말하세요!",
+"가방 안에 있을 법한 것 3가지를 말하세요!",
+"주머니에 넣을 수 있는 것 3가지를 말하세요!",
+"책상 위에 있을 법한 것 3가지를 말하세요!",
+"밤에 볼 수 있는 것 3가지를 말하세요!",
+"아침에 볼 수 있는 것 3가지를 말하세요!"
+
+];
+
+
+/* =========================================
+   상태
+========================================= */
+
+let scores = [0,0];
+
+let currentPlayer = 0;
+
+let running = false;
+
+let timerStart = 0;
+
+let animationFrame = null;
+
+let questionUsed = [];
+
+
+/* =========================================
+   요소
+========================================= */
+
+const questionEl =
+    document.getElementById("question");
+
+const turnEl =
+    document.getElementById("turn");
+
+const timerEl =
+    document.getElementById("timer");
+
+const ring =
+    document.getElementById("ring");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const result =
+    document.getElementById("result");
+
+const successBtn =
+    document.getElementById("successBtn");
+
+const failBtn =
+    document.getElementById("failBtn");
+
+const nextBtn =
+    document.getElementById("nextBtn");
+
+const countdown =
+    document.getElementById("countdown");
+
+const countNumber =
+    document.getElementById("countNumber");
+
+const card =
+    document.getElementById("card");
+
+const end =
+    document.getElementById("end");
+
+const winner =
+    document.getElementById("winner");
+
+const finalScore =
+    document.getElementById("finalScore");
+
+const player1Box =
+    document.getElementById("player1Box");
+
+const player2Box =
+    document.getElementById("player2Box");
+
+const score1 =
+    document.getElementById("score1");
+
+const score2 =
+    document.getElementById("score2");
+
+const restartBtn =
+    document.getElementById("restartBtn");
+
+
+/* =========================================
+   소리
+========================================= */
+
+const AudioContext =
+    window.AudioContext ||
+    window.webkitAudioContext;
+
+let audioCtx = null;
+
+function sound(freq=700,duration=.12){
+
+    if(!AudioContext) return;
+
+    if(!audioCtx)
+        audioCtx = new AudioContext();
+
+    if(audioCtx.state === "suspended")
+        audioCtx.resume();
+
+    const osc =
+        audioCtx.createOscillator();
+
+    const gain =
+        audioCtx.createGain();
+
+    osc.frequency.value = freq;
+
+    osc.type = "sine";
+
+    gain.gain.setValueAtTime(
+        .001,
+        audioCtx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .22,
+        audioCtx.currentTime+.01
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioCtx.currentTime+duration
+    );
+
+    osc.connect(gain);
+
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+
+    osc.stop(
+        audioCtx.currentTime+duration
+    );
+}
+
+
+/* =========================================
+   플레이어 표시
+========================================= */
+
+function updatePlayers(){
+
+    score1.textContent = scores[0];
+
+    score2.textContent = scores[1];
+
+    if(currentPlayer === 0){
+
+        player1Box.classList.add("active");
+
+        player2Box.classList.remove("active");
+
+        turnEl.textContent =
+            "PLAYER 1 차례";
+
+    }else{
+
+        player2Box.classList.add("active");
+
+        player1Box.classList.remove("active");
+
+        turnEl.textContent =
+            "PLAYER 2 차례";
+    }
+}
+
+
+/* =========================================
+   다음 문제 준비
+========================================= */
+
+function prepareQuestion(){
+
+    if(questionUsed.length >= questions.length){
+
+        questionUsed = [];
+    }
+
+    let index;
+
+    do{
+
+        index =
+            Math.floor(
+                Math.random()*questions.length
+            );
+
+    }while(
+        questionUsed.includes(index)
+    );
+
+    questionUsed.push(index);
+
+    return questions[index];
+}
+
+
+/* =========================================
+   시작
+========================================= */
+
+startBtn.addEventListener(
+    "click",
+    ()=>{
+
+        if(running) return;
+
+        startBtn.style.display = "none";
+
+        countdown.classList.add("show");
+
+        let n = 3;
+
+        countNumber.textContent = n;
+
+        sound(600,.1);
+
+        const interval =
+            setInterval(()=>{
+
+                n--;
+
+                if(n > 0){
+
+                    countNumber.textContent = n;
+
+                    sound(
+                        n === 1 ? 900 : 650,
+                        .1
+                    );
+
+                }else{
+
+                    clearInterval(interval);
+
+                    countdown.classList.remove(
+                        "show"
+                    );
+
+                    /*
+                        ★ 핵심 ★
+                        여기서 처음으로 문제를 생성한다.
+                    */
+
+                    questionEl.textContent =
+                        prepareQuestion();
+
+                    questionEl.classList.remove(
+                        "hidden"
+                    );
+
+                    startTimer();
+                }
+
+            },800);
+    }
+);
+
+
+/* =========================================
+   타이머
+========================================= */
+
+function startTimer(){
+
+    running = true;
+
+    timerStart =
+        performance.now();
+
+    timerEl.textContent = "5.00";
+
+    ring.style.setProperty(
+        "--progress",
+        "0deg"
+    );
+
+    animationFrame =
+        requestAnimationFrame(
+            updateTimer
+        );
+}
+
+
+function updateTimer(now){
+
+    if(!running) return;
+
+    const elapsed =
+        (now - timerStart) / 1000;
+
+    const remaining =
+        Math.max(0,5-elapsed);
+
+    timerEl.textContent =
+        remaining.toFixed(2);
+
+    const progress =
+        (elapsed / 5) * 360;
+
+    ring.style.setProperty(
+        "--progress",
+        `${progress}deg`
+    );
+
+    if(elapsed >= 5){
+
+        finishTimer();
+
+        return;
+    }
+
+    animationFrame =
+        requestAnimationFrame(
+            updateTimer
+        );
+}
+
+
+/* =========================================
+   종료
+========================================= */
+
+function finishTimer(){
+
+    running = false;
+
+    cancelAnimationFrame(
+        animationFrame
+    );
+
+    timerEl.textContent =
+        "0.00";
+
+    ring.style.setProperty(
+        "--progress",
+        "360deg"
+    );
+
+    sound(950,.18);
+
+    setTimeout(()=>{
+        sound(650,.15);
+    },180);
+
+    result.classList.add("show");
+}
+
+
+/* =========================================
+   성공
+========================================= */
+
+successBtn.addEventListener(
+    "click",
+    ()=>{
+
+        scores[currentPlayer]++;
+
+        updatePlayers();
+
+        card.classList.remove("shake");
+
+        void card.offsetWidth;
+
+        card.classList.add("flash");
+
+        sound(1100,.15);
+
+        result.classList.remove("show");
+
+        nextBtn.classList.add("show");
+
+        if(scores[currentPlayer] >= 10){
+
+            setTimeout(
+                endGame,
+                400
+            );
+        }
+    }
+);
+
+
+/* =========================================
+   실패
+========================================= */
+
+failBtn.addEventListener(
+    "click",
+    ()=>{
+
+        card.classList.remove("flash");
+
+        void card.offsetWidth;
+
+        card.classList.add("shake");
+
+        sound(250,.2);
+
+        result.classList.remove("show");
+
+        nextBtn.classList.add("show");
+    }
+);
+
+
+/* =========================================
+   다음 문제
+========================================= */
+
+nextBtn.addEventListener(
+    "click",
+    ()=>{
+
+        currentPlayer =
+            currentPlayer === 0
+            ? 1
+            : 0;
+
+        updatePlayers();
+
+        /*
+            문제 즉시 삭제
+        */
+
+        questionEl.textContent = "";
+
+        questionEl.classList.add(
+            "hidden"
+        );
+
+        timerEl.textContent = "5.00";
+
+        ring.style.setProperty(
+            "--progress",
+            "0deg"
+        );
+
+        startBtn.style.display =
+            "inline-block";
+
+        nextBtn.classList.remove(
+            "show"
+        );
+
+        card.classList.remove(
+            "flash",
+            "shake"
+        );
+    }
+);
+
+
+/* =========================================
+   게임 종료
+========================================= */
+
+function endGame(){
+
+    const s1 = scores[0];
+
+    const s2 = scores[1];
+
+    if(s1 > s2){
+
+        winner.textContent =
+            "🏆 PLAYER 1 승리!";
+
+    }else if(s2 > s1){
+
+        winner.textContent =
+            "🏆 PLAYER 2 승리!";
+
+    }else{
+
+        winner.textContent =
+            "🤝 무승부!";
+    }
+
+    finalScore.innerHTML =
+        `PLAYER 1　<b>${s1}</b>점<br>
+         PLAYER 2　<b>${s2}</b>점`;
+
+    end.classList.add("show");
+
+    sound(1200,.2);
+
+    setTimeout(()=>{
+        sound(1500,.25);
+    },220);
+}
+
+
+/* =========================================
+   다시 시작
+========================================= */
+
+restartBtn.addEventListener(
+    "click",
+    ()=>{
+
+        scores = [0,0];
+
+        currentPlayer = 0;
+
+        questionUsed = [];
+
+        end.classList.remove(
+            "show"
+        );
+
+        updatePlayers();
+
+        /*
+            시작 화면으로 복귀
+        */
+
+        questionEl.textContent = "";
+
+        questionEl.classList.add(
+            "hidden"
+        );
+
+        timerEl.textContent =
+            "5.00";
+
+        ring.style.setProperty(
+            "--progress",
+            "0deg"
+        );
+
+        startBtn.style.display =
+            "inline-block";
+
+        result.classList.remove(
+            "show"
+        );
+
+        nextBtn.classList.remove(
+            "show"
+        );
+    }
+);
+
+
+/* =========================================
+   초기 상태
+========================================= */
+
+updatePlayers();
+
+questionEl.textContent = "";
+
+questionEl.classList.add(
+    "hidden"
+);
+
+timerEl.textContent = "5.00";
+
+ring.style.setProperty(
+    "--progress",
+    "0deg"
+);
+
+</script>
+
+</body>
+      </html>
