@@ -2,636 +2,985 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>5초 준다! - 2 Player</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5초 준다! - 2 PLAYER</title>
 
 <style>
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,"Noto Sans KR",sans-serif;
 }
 
 body{
-    min-height:100vh;
-    background:
-        radial-gradient(circle at 50% 0%,#293142 0%,#0b0e15 48%,#05070b 100%);
-    color:#fff;
-    font-family:Arial,"Noto Sans KR",sans-serif;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% -10%,#27345e 0%,#11162b 38%,#070a13 100%);
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow-x:hidden;
 }
 
-.app{
-    width:min(94vw,680px);
-    padding:20px 0 30px;
+.game{
+  width:min(820px,94vw);
+  padding:24px 0 40px;
 }
-
-/* HEADER */
 
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
+  text-align:center;
+  margin-bottom:18px;
 }
 
-.logo{
-    font-size:21px;
-    font-weight:900;
+.header h1{
+  font-size:clamp(30px,6vw,52px);
+  font-weight:900;
+  letter-spacing:-2px;
 }
 
-.logo span{
-    color:#ffb52e;
+.header p{
+  margin-top:7px;
+  color:#9ca8c7;
+  font-size:14px;
 }
 
-.mode{
-    font-size:10px;
-    letter-spacing:2px;
-    color:#727c8f;
-}
-
-/* PLAYERS */
+/* PLAYER */
 
 .players{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-    margin-bottom:16px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:14px;
 }
 
 .player{
-    padding:15px 12px;
-    border-radius:17px;
-    background:rgba(18,23,32,.9);
-    border:1px solid rgba(255,255,255,.07);
-    text-align:center;
-    transition:.25s;
+  background:rgba(20,27,48,.82);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  padding:14px 17px;
+  transition:.25s;
+  position:relative;
+  overflow:hidden;
 }
 
 .player.active{
-    border-color:#ffb52e;
-    background:rgba(255,181,46,.07);
-    box-shadow:
-        0 0 25px rgba(255,181,46,.12),
-        inset 0 0 20px rgba(255,181,46,.03);
+  border-color:#72a7ff;
+  box-shadow:
+    0 0 25px rgba(77,140,255,.25),
+    inset 0 0 20px rgba(77,140,255,.06);
+  transform:translateY(-2px);
+}
+
+.player.active::before{
+  content:"CURRENT";
+  position:absolute;
+  top:8px;
+  right:10px;
+  font-size:9px;
+  font-weight:900;
+  color:#78aaff;
+  letter-spacing:1px;
 }
 
 .player-name{
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:2px;
-    color:#7d8799;
-    margin-bottom:5px;
-}
-
-.player.active .player-name{
-    color:#ffb52e;
+  color:#aeb9d5;
+  font-size:12px;
+  font-weight:bold;
 }
 
 .player-score{
-    font-size:30px;
-    font-weight:900;
+  font-size:30px;
+  font-weight:900;
+  margin-top:2px;
+}
+
+.player-bottom{
+  display:flex;
+  justify-content:space-between;
+  color:#7e8aa8;
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* ROUND */
+
+.round-info{
+  text-align:center;
+  margin-bottom:13px;
+}
+
+.round{
+  font-weight:900;
+  font-size:14px;
+  color:#aeb9d5;
+}
+
+.turn{
+  margin-top:5px;
+  font-size:20px;
+  font-weight:900;
+  color:#79aaff;
 }
 
 /* CARD */
 
 .card{
-    position:relative;
-    min-height:590px;
-    padding:27px;
-    border-radius:28px;
-    background:
-        linear-gradient(145deg,#1d2330,#0d1119);
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:0 30px 80px rgba(0,0,0,.5);
-    text-align:center;
-    overflow:hidden;
+  background:rgba(15,20,36,.88);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:28px;
+  padding:28px 22px 24px;
+  box-shadow:0 20px 70px rgba(0,0,0,.35);
+  position:relative;
+  overflow:hidden;
 }
 
-.card::before{
-    content:"";
-    position:absolute;
-    width:280px;
-    height:280px;
-    left:50%;
-    top:-170px;
-    transform:translateX(-50%);
-    border-radius:50%;
-    background:rgba(255,181,46,.08);
-    filter:blur(70px);
+.question-area{
+  min-height:120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10px;
 }
-
-/* TURN */
-
-.turn{
-    position:relative;
-    font-size:11px;
-    color:#ffb52e;
-    letter-spacing:2px;
-    font-weight:bold;
-    margin-bottom:15px;
-}
-
-/* QUESTION */
 
 .question{
-    position:relative;
-    min-height:85px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:clamp(24px,6vw,35px);
-    line-height:1.25;
-    font-weight:900;
-    letter-spacing:-1px;
-    word-break:keep-all;
+  font-size:clamp(23px,5vw,37px);
+  font-weight:900;
+  line-height:1.35;
+  letter-spacing:-1px;
 }
 
-/*
-   시작 전에는 완전히 빈 공간.
-   글자도 없고, 배경도 없음.
-*/
-
 .question.hidden{
-    color:transparent;
-    font-size:0;
+  visibility:hidden;
+}
+
+/* EVENT */
+
+.event-area{
+  text-align:center;
+  height:34px;
+}
+
+.event{
+  display:inline-flex;
+  min-height:28px;
+  align-items:center;
+  justify-content:center;
+  padding:5px 13px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  color:#bac5df;
+  font-size:12px;
+  font-weight:800;
+  margin:5px auto 16px;
+}
+
+.event.hot{
+  background:rgba(255,94,94,.13);
+  color:#ff8c8c;
+}
+
+.event.good{
+  background:rgba(79,210,141,.13);
+  color:#6ee7a5;
 }
 
 /* TIMER */
 
 .timer-wrap{
-    width:220px;
-    height:220px;
-    margin:23px auto;
-    position:relative;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:8px 0 22px;
 }
 
 .ring{
-    position:absolute;
-    inset:0;
-    border-radius:50%;
-    padding:5px;
-
-    background:
-        conic-gradient(
-            #ffb52e var(--progress,0deg),
-            rgba(255,255,255,.05) var(--progress,0deg)
-        );
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:conic-gradient(#72a7ff 360deg,#202945 0deg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
 }
 
-.ring::after{
-    content:"";
-    position:absolute;
-    inset:5px;
-    border-radius:50%;
-    background:#10141c;
+.ring::before{
+  content:"";
+  position:absolute;
+  width:164px;
+  height:164px;
+  border-radius:50%;
+  background:#10162a;
 }
 
 .timer{
-    position:relative;
-    z-index:2;
-    font-size:66px;
-    font-weight:900;
-    font-variant-numeric:tabular-nums;
-    letter-spacing:-3px;
+  position:relative;
+  z-index:2;
+  font-size:47px;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
 }
 
-.unit{
-    position:absolute;
-    z-index:3;
-    bottom:47px;
-    color:#687285;
-    font-size:9px;
-    letter-spacing:3px;
+.timer.warning{
+  color:#ff6464;
+  animation:warning .35s infinite alternate;
+}
+
+@keyframes warning{
+  from{transform:scale(1);}
+  to{transform:scale(1.09);}
 }
 
 /* BUTTON */
 
-.controls{
-    position:relative;
-    display:flex;
-    justify-content:center;
+.main-btn{
+  width:100%;
+  border:0;
+  border-radius:15px;
+  padding:16px;
+  background:linear-gradient(135deg,#548dff,#7a63ff);
+  color:white;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+  box-shadow:0 8px 25px rgba(80,120,255,.22);
 }
 
-button{
-    border:0;
-    cursor:pointer;
-    color:#fff;
-    font-family:inherit;
-    font-weight:800;
-    transition:.15s;
+.main-btn:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
 }
 
-button:active{
-    transform:scale(.96);
+.main-btn:active{
+  transform:scale(.98);
 }
 
-.start{
-    width:230px;
-    height:54px;
-    border-radius:15px;
-    background:
-        linear-gradient(135deg,#ffb52e,#ff7d20);
-    box-shadow:
-        0 10px 30px rgba(255,150,40,.2);
+.main-btn:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
 }
 
-.start:hover{
-    filter:brightness(1.1);
-    transform:translateY(-2px);
-}
-
-/* RESULT */
-
-.result{
-    display:none;
-    margin-top:18px;
-}
-
-.result.show{
-    display:block;
-}
-
-.result p{
-    color:#8d96a7;
-    font-size:12px;
-    margin-bottom:12px;
-}
+/* RESULT BUTTONS */
 
 .result-buttons{
-    display:flex;
-    justify-content:center;
-    gap:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:11px;
 }
 
-.result button{
-    height:47px;
-    border-radius:13px;
-    padding:0 27px;
+.result-btn{
+  border:0;
+  border-radius:15px;
+  padding:16px 10px;
+  color:#fff;
+  font-size:17px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
 }
 
-.success{
-    background:#46d89b;
-    color:#06150e;
+.result-btn:hover{
+  transform:translateY(-2px);
+  filter:brightness(1.08);
 }
 
-.fail{
-    background:rgba(255,80,95,.12);
-    border:1px solid rgba(255,80,95,.3);
-    color:#ff737e;
+.result-btn:active{
+  transform:scale(.97);
 }
 
-/* NEXT */
-
-.next{
-    margin-top:14px;
-    height:48px;
-    padding:0 35px;
-    border-radius:13px;
-    background:#252c39;
-    display:none;
+.success-btn{
+  background:linear-gradient(135deg,#20b978,#35d894);
+  box-shadow:0 8px 25px rgba(50,220,150,.18);
 }
 
-.next.show{
-    display:inline-block;
+.fail-btn{
+  background:linear-gradient(135deg,#e34e60,#ff6877);
+  box-shadow:0 8px 25px rgba(255,80,100,.18);
 }
 
-.help{
-    margin-top:15px;
-    text-align:center;
-    color:#596376;
-    font-size:10px;
+.result-buttons.hidden{
+  display:none;
+}
+
+/* DIFFICULTY */
+
+.difficulty{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:11px;
+}
+
+.diff-btn{
+  padding:11px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:#171e34;
+  color:#9ba7c4;
+  cursor:pointer;
+  font-weight:800;
+}
+
+.diff-btn.active{
+  background:#273c70;
+  color:#fff;
+  border-color:#5f8fff;
+}
+
+.diff-btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+/* STATUS */
+
+.status{
+  text-align:center;
+  margin-top:13px;
+  color:#707c9a;
+  font-size:12px;
 }
 
 /* COUNTDOWN */
 
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(4,6,10,.86);
-    backdrop-filter:blur(12px);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:100;
+.countdown{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:rgba(3,5,12,.78);
+  backdrop-filter:blur(12px);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
 
-.overlay.show{
-    display:flex;
+.countdown.show{
+  display:flex;
 }
 
-.count{
-    font-size:150px;
-    font-weight:1000;
-    color:#ffb52e;
-    text-shadow:
-        0 0 50px rgba(255,181,46,.5);
+.count-number{
+  font-size:clamp(100px,25vw,220px);
+  font-weight:1000;
+  color:#fff;
+  text-shadow:0 0 60px rgba(100,150,255,.7);
+  animation:countPop .85s ease;
+}
+
+@keyframes countPop{
+  0%{
+    transform:scale(1.7);
+    opacity:0;
+  }
+  35%{
+    opacity:1;
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* ANNOUNCE */
+
+.announce{
+  position:fixed;
+  inset:0;
+  z-index:110;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(2,4,10,.7);
+  backdrop-filter:blur(7px);
+}
+
+.announce.show{
+  display:flex;
+}
+
+.announce-text{
+  font-size:clamp(48px,12vw,120px);
+  font-weight:1000;
+  text-align:center;
+  animation:announcePop .45s ease;
+  text-shadow:0 0 50px rgba(255,255,255,.25);
+}
+
+@keyframes announcePop{
+  0%{
+    transform:scale(.45);
+    opacity:0;
+  }
+
+  70%{
+    transform:scale(1.08);
+  }
+
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+/* EFFECTS */
+
+.flash{
+  animation:flash .4s ease;
+}
+
+@keyframes flash{
+  0%{
+    box-shadow:0 0 0 rgba(90,255,170,0);
+  }
+
+  50%{
+    box-shadow:0 0 80px rgba(90,255,170,.55);
+  }
+
+  100%{
+    box-shadow:0 0 0 rgba(90,255,170,0);
+  }
+}
+
+.shake{
+  animation:shake .42s ease;
+}
+
+@keyframes shake{
+  0%,100%{
+    transform:translateX(0);
+  }
+
+  20%{
+    transform:translateX(-10px);
+  }
+
+  40%{
+    transform:translateX(10px);
+  }
+
+  60%{
+    transform:translateX(-7px);
+  }
+
+  80%{
+    transform:translateX(7px);
+  }
+}
+
+/* PARTICLES */
+
+.particles{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:120;
+}
+
+.particle{
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#76a7ff;
+  animation:particle .8s ease-out forwards;
+}
+
+@keyframes particle{
+  from{
+    transform:translate(0,0) scale(1);
+    opacity:1;
+  }
+
+  to{
+    transform:translate(var(--x),var(--y)) scale(0);
+    opacity:0;
+  }
 }
 
 /* END */
 
 .end{
-    position:fixed;
-    inset:0;
-    background:rgba(4,6,10,.86);
-    backdrop-filter:blur(15px);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:200;
-    padding:20px;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:rgba(3,5,12,.88);
+  backdrop-filter:blur(15px);
+  padding:20px;
 }
 
 .end.show{
-    display:flex;
+  display:flex;
 }
 
-.endbox{
-    width:min(90vw,430px);
-    padding:38px 25px;
-    text-align:center;
-    border-radius:27px;
-    background:#151a24;
-    border:1px solid rgba(255,255,255,.1);
-    box-shadow:0 30px 100px rgba(0,0,0,.6);
+.end-box{
+  width:min(700px,94vw);
+  max-height:90vh;
+  overflow:auto;
+  background:#10162a;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:28px;
+  padding:28px;
+  box-shadow:0 25px 100px rgba(0,0,0,.55);
 }
 
-.trophy{
-    font-size:58px;
-    margin-bottom:12px;
+.end-title{
+  text-align:center;
+  font-size:35px;
+  font-weight:1000;
+  margin-bottom:5px;
 }
 
-.endbox h1{
-    font-size:31px;
-    margin-bottom:10px;
+.end-sub{
+  text-align:center;
+  color:#8d99b7;
+  font-size:13px;
+  margin-bottom:24px;
 }
 
-.endbox p{
-    color:#8b94a5;
-    line-height:1.7;
-    margin-bottom:23px;
+.final-players{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
-.restart{
-    width:100%;
-    height:52px;
-    border-radius:14px;
-    background:
-        linear-gradient(135deg,#ffb52e,#ff7d20);
+.final-player{
+  background:#171e34;
+  border-radius:18px;
+  padding:18px;
 }
 
-/* EFFECTS */
-
-.shake{
-    animation:shake .35s;
+.final-player h3{
+  color:#aeb9d5;
+  font-size:14px;
+  margin-bottom:6px;
 }
 
-@keyframes shake{
-    0%,100%{transform:translateX(0)}
-    20%{transform:translateX(-8px)}
-    40%{transform:translateX(8px)}
-    60%{transform:translateX(-6px)}
-    80%{transform:translateX(6px)}
+.final-score{
+  font-size:36px;
+  font-weight:1000;
+  margin-bottom:13px;
 }
 
-.flash{
-    animation:flash .5s ease;
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-@keyframes flash{
-    50%{
-        box-shadow:
-            0 0 0 3px rgba(70,216,155,.4),
-            0 0 80px rgba(70,216,155,.25);
-    }
+.stat{
+  background:rgba(255,255,255,.04);
+  border-radius:11px;
+  padding:10px;
 }
 
-@media(max-width:500px){
+.stat-label{
+  color:#7885a3;
+  font-size:10px;
+}
 
-    .app{
-        width:94vw;
-    }
+.stat-value{
+  margin-top:3px;
+  font-weight:900;
+  font-size:15px;
+}
 
-    .card{
-        min-height:550px;
-        padding:20px;
-        border-radius:23px;
-    }
+.result-message{
+  text-align:center;
+  margin:20px 0;
+  font-size:22px;
+  font-weight:900;
+}
 
-    .timer-wrap{
-        width:190px;
-        height:190px;
-    }
+@media(max-width:600px){
 
-    .timer{
-        font-size:57px;
-    }
+  .game{
+    padding-top:14px;
+  }
 
-    .unit{
-        bottom:41px;
-    }
+  .card{
+    padding:20px 15px;
+    border-radius:22px;
+  }
 
-    .question{
-        font-size:25px;
-    }
+  .ring{
+    width:165px;
+    height:165px;
+  }
 
-    .player-score{
-        font-size:26px;
-    }
+  .ring::before{
+    width:143px;
+    height:143px;
+  }
+
+  .timer{
+    font-size:40px;
+  }
+
+  .final-players{
+    grid-template-columns:1fr;
+  }
+
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="game">
 
-    <div class="header">
-        <div class="logo">
-            5초 <span>준다!</span>
-        </div>
+  <div class="header">
+    <h1>5초 준다!</h1>
+    <p>2 PLAYER · 총 100 ROUND</p>
+  </div>
 
-        <div class="mode">
-            2 PLAYER
-        </div>
-    </div>
+  <!-- PLAYER SCORE -->
 
+  <div class="players">
 
-    <!-- 점수판 -->
+    <div class="player active" id="playerCard0">
 
-    <div class="players">
+      <div class="player-name">
+        PLAYER 1
+      </div>
 
-        <div class="player active" id="player1Box">
+      <div class="player-score" id="score0">
+        0
+      </div>
 
-            <div class="player-name">
-                PLAYER 1
-            </div>
+      <div class="player-bottom">
+        <span>
+          콤보 <b id="combo0">0</b>
+        </span>
 
-            <div class="player-score" id="score1">
-                0
-            </div>
-
-        </div>
-
-
-        <div class="player" id="player2Box">
-
-            <div class="player-name">
-                PLAYER 2
-            </div>
-
-            <div class="player-score" id="score2">
-                0
-            </div>
-
-        </div>
+        <span>
+          성공 <b id="success0">0</b>
+        </span>
+      </div>
 
     </div>
 
+    <div class="player" id="playerCard1">
 
-    <!-- 게임 -->
+      <div class="player-name">
+        PLAYER 2
+      </div>
 
-    <div class="card" id="card">
+      <div class="player-score" id="score1">
+        0
+      </div>
 
-        <div class="turn" id="turn">
-            PLAYER 1 차례
-        </div>
+      <div class="player-bottom">
+        <span>
+          콤보 <b id="combo1">0</b>
+        </span>
 
-
-        <!--
-            시작 전에는 아무 글자도 없음.
-            문제는 JS에서 카운트다운이 끝난 뒤
-            처음 생성된다.
-        -->
-
-        <div class="question hidden" id="question"></div>
-
-
-        <!-- TIMER -->
-
-        <div class="timer-wrap">
-
-            <div class="ring" id="ring"></div>
-
-            <div class="timer" id="timer">
-                5.00
-            </div>
-
-            <div class="unit">
-                SECONDS
-            </div>
-
-        </div>
-
-
-        <!-- START -->
-
-        <div class="controls">
-
-            <button class="start" id="startBtn">
-                도전 시작
-            </button>
-
-        </div>
-
-
-        <!-- RESULT -->
-
-        <div class="result" id="result">
-
-            <p>
-                5초 안에 3개를 말했다면 성공!
-            </p>
-
-            <div class="result-buttons">
-
-                <button
-                    class="success"
-                    id="successBtn">
-                    ✓ 성공
-                </button>
-
-                <button
-                    class="fail"
-                    id="failBtn">
-                    ✕ 실패
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- NEXT -->
-
-        <button
-            class="next"
-            id="nextBtn">
-
-            다음 문제 →
-
-        </button>
+        <span>
+          성공 <b id="success1">0</b>
+        </span>
+      </div>
 
     </div>
 
+  </div>
 
-    <div class="help">
-        5초 안에 제시된 주제의 답 3개를 말하세요
+  <div class="round-info">
+
+    <div class="round" id="roundText">
+      ROUND 1 / 100
     </div>
+
+    <div class="turn" id="turnText">
+      PLAYER 1의 차례
+    </div>
+
+  </div>
+
+  <div class="card" id="gameCard">
+
+    <div class="event-area">
+      <div class="event" id="eventText">
+        READY
+      </div>
+    </div>
+
+    <div class="question-area">
+
+      <div class="question hidden" id="question"></div>
+
+    </div>
+
+    <div class="timer-wrap">
+
+      <div class="ring" id="ring">
+
+        <div class="timer" id="timer">
+          5.00
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- START -->
+
+    <button class="main-btn" id="startBtn">
+      도전 시작
+    </button>
+
+    <!-- SUCCESS / FAIL -->
+
+    <div class="result-buttons hidden" id="resultButtons">
+
+      <button
+        class="result-btn success-btn"
+        id="successBtn">
+        ✅ 성공
+      </button>
+
+      <button
+        class="result-btn fail-btn"
+        id="failBtn">
+        ❌ 실패
+      </button>
+
+    </div>
+
+    <div class="difficulty">
+
+      <button
+        class="diff-btn active"
+        data-diff="easy">
+        EASY
+      </button>
+
+      <button
+        class="diff-btn"
+        data-diff="normal">
+        NORMAL
+      </button>
+
+      <button
+        class="diff-btn"
+        data-diff="hard">
+        HARD
+      </button>
+
+    </div>
+
+    <div class="status" id="status">
+      문제는 시작할 때까지 공개되지 않습니다.
+    </div>
+
+  </div>
 
 </div>
 
 
 <!-- COUNTDOWN -->
 
-<div class="overlay" id="countdown">
+<div class="countdown" id="countdown">
 
-    <div class="count" id="countNumber">
-        3
-    </div>
+  <div class="count-number" id="countNumber">
+    3
+  </div>
 
 </div>
 
 
-<!-- GAME END -->
+<!-- ANNOUNCE -->
 
-<div class="end" id="end">
+<div class="announce" id="announce">
 
-    <div class="endbox">
+  <div class="announce-text" id="announceText"></div>
 
-        <div class="trophy">
-            🏆
+</div>
+
+
+<div class="particles" id="particles"></div>
+
+
+<!-- FINAL -->
+
+<div class="end" id="endScreen">
+
+  <div class="end-box">
+
+    <div class="end-title">
+      GAME COMPLETE
+    </div>
+
+    <div class="end-sub">
+      100 ROUND 모두 완료!
+    </div>
+
+    <div class="final-players">
+
+      <!-- P1 -->
+
+      <div class="final-player">
+
+        <h3>PLAYER 1</h3>
+
+        <div
+          class="final-score"
+          id="finalScore0">
+          0 POINT
         </div>
 
-        <h1 id="winner">
-            게임 종료!
-        </h1>
+        <div class="stats">
 
-        <p id="finalScore"></p>
+          <div class="stat">
+            <div class="stat-label">
+              성공
+            </div>
 
-        <button
-            class="restart"
-            id="restartBtn">
+            <div
+              class="stat-value"
+              id="finalSuccess0">
+              0
+            </div>
+          </div>
 
-            다시 플레이
+          <div class="stat">
+            <div class="stat-label">
+              실패
+            </div>
 
-        </button>
+            <div
+              class="stat-value"
+              id="finalFail0">
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              최고 콤보
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalBest0">
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              평균 시간
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalAvg0">
+              0.00초
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- P2 -->
+
+      <div class="final-player">
+
+        <h3>PLAYER 2</h3>
+
+        <div
+          class="final-score"
+          id="finalScore1">
+          0 POINT
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+            <div class="stat-label">
+              성공
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalSuccess1">
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              실패
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalFail1">
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              최고 콤보
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalBest1">
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              평균 시간
+            </div>
+
+            <div
+              class="stat-value"
+              id="finalAvg1">
+              0.00초
+            </div>
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
+
+    <div
+      class="result-message"
+      id="resultMessage">
+      GAME OVER
+    </div>
+
+    <button
+      class="main-btn"
+      onclick="location.reload()">
+      다시 플레이
+    </button>
+
+  </div>
 
 </div>
 
 
 <script>
 
-/* =========================================
-   문제 100개
-========================================= */
+/* =========================
+   QUESTION BANK
+========================= */
 
 const questions = [
 
@@ -645,678 +994,1189 @@ const questions = [
 "음료 3가지를 말하세요!",
 "학교에서 볼 수 있는 것 3가지를 말하세요!",
 "탈것 3가지를 말하세요!",
-
-"전자기기 3가지를 말하세요!",
-"편의점에서 살 수 있는 것 3가지를 말하세요!",
-"겨울에 생각나는 것 3가지를 말하세요!",
-"여름에 생각나는 것 3가지를 말하세요!",
-"주방에서 볼 수 있는 것 3가지를 말하세요!",
-"영화 장르 3가지를 말하세요!",
-"직업 3가지를 말하세요!",
-"악기 3가지를 말하세요!",
-"하늘에서 볼 수 있는 것 3가지를 말하세요!",
-"바다에서 볼 수 있는 것 3가지를 말하세요!",
-
-"문구류 3가지를 말하세요!",
-"집에서 찾을 수 있는 것 3가지를 말하세요!",
-"빨간색인 것 3가지를 말하세요!",
-"둥근 것 3가지를 말하세요!",
-"학교 과목 3가지를 말하세요!",
-"한국 음식 3가지를 말하세요!",
-"아침에 하는 일 3가지를 말하세요!",
-"주말에 할 수 있는 것 3가지를 말하세요!",
-"스마트폰으로 할 수 있는 것 3가지를 말하세요!",
-"인터넷에서 할 수 있는 것 3가지를 말하세요!",
-
-"만화에 나올 법한 캐릭터 3가지를 말하세요!",
-"슈퍼히어로 3명을 말하세요!",
-"공포영화에 나오는 것 3가지를 말하세요!",
-"학교에 가져가는 것 3가지를 말하세요!",
-"비 오는 날 필요한 것 3가지를 말하세요!",
-"여행 갈 때 챙기는 것 3가지를 말하세요!",
-"생일에 받으면 좋은 것 3가지를 말하세요!",
-"아이스크림 맛 3가지를 말하세요!",
-"피자 토핑 3가지를 말하세요!",
-"라면에 넣을 수 있는 것 3가지를 말하세요!",
-
-"빵 종류 3가지를 말하세요!",
+"채소 3가지를 말하세요!",
 "과자 3가지를 말하세요!",
-"초콜릿 종류 3가지를 말하세요!",
-"패스트푸드 메뉴 3가지를 말하세요!",
-"카페에서 주문할 수 있는 것 3가지를 말하세요!",
-"과일 맛 음료 3가지를 말하세요!",
-"한국의 도시 3곳을 말하세요!",
-"해외 도시 3곳을 말하세요!",
-"유명한 랜드마크 3개를 말하세요!",
-"공원에서 볼 수 있는 것 3가지를 말하세요!",
-
-"교통수단 3가지를 말하세요!",
-"자동차 브랜드 3개를 말하세요!",
-"게임기 3가지를 말하세요!",
-"컴퓨터 부품 3가지를 말하세요!",
-"인터넷 브라우저 3가지를 말하세요!",
-"SNS 3가지를 말하세요!",
-"메신저 앱 3가지를 말하세요!",
-"유튜브 콘텐츠 3가지를 말하세요!",
-"사진을 찍을 만한 것 3가지를 말하세요!",
+"편의점에서 살 수 있는 것 3가지를 말하세요!",
+"문구류 3가지를 말하세요!",
+"스포츠 3가지를 말하세요!",
+"악기 3가지를 말하세요!",
+"직업 3가지를 말하세요!",
+"신체 부위 3가지를 말하세요!",
 "가전제품 3가지를 말하세요!",
+"전자기기 3가지를 말하세요!",
+"교통수단 3가지를 말하세요!",
+"계절 3가지를 말하세요!",
+"요일 3가지를 말하세요!",
+"도시 3곳을 말하세요!",
+"동물원에서 볼 수 있는 동물 3가지를 말하세요!",
+"학교 과목 3가지를 말하세요!",
+"게임 장르 3가지를 말하세요!",
+"간식 3가지를 말하세요!",
+"라면 종류 3가지를 말하세요!",
+"빵 종류 3가지를 말하세요!",
 
-"침실에서 볼 수 있는 것 3가지를 말하세요!",
-"욕실에서 볼 수 있는 것 3가지를 말하세요!",
-"거실에서 볼 수 있는 것 3가지를 말하세요!",
-"교실에 있는 것 3가지를 말하세요!",
-"운동장에서 볼 수 있는 것 3가지를 말하세요!",
-"도서관에서 볼 수 있는 것 3가지를 말하세요!",
-"마트에서 살 수 있는 것 3가지를 말하세요!",
+"빨간색인 물건 3가지를 말하세요!",
+"학교에 있는 장소 3곳을 말하세요!",
+"여름에 먹는 음식 3가지를 말하세요!",
+"겨울에 사용하는 물건 3가지를 말하세요!",
+"인터넷에서 사용하는 것 3가지를 말하세요!",
+"스마트폰으로 할 수 있는 것 3가지를 말하세요!",
+"여행할 때 필요한 것 3가지를 말하세요!",
+"비 오는 날 필요한 것 3가지를 말하세요!",
+"공원에서 볼 수 있는 것 3가지를 말하세요!",
+"바다에서 볼 수 있는 것 3가지를 말하세요!",
+"하늘에서 볼 수 있는 것 3가지를 말하세요!",
+"집에서 찾을 수 있는 것 3가지를 말하세요!",
+"주방에서 사용하는 물건 3가지를 말하세요!",
+"학교에서 사용하는 전자기기 3가지를 말하세요!",
+"유명한 스포츠 3가지를 말하세요!",
+"유명한 게임 3가지를 말하세요!",
+"유명한 캐릭터 3명을 말하세요!",
+"한국 음식 3가지를 말하세요!",
+"일본 음식 3가지를 말하세요!",
+"서양 음식 3가지를 말하세요!",
+
+"영화 장르 3가지를 말하세요!",
+"음악 장르 3가지를 말하세요!",
+"만화 장르 3가지를 말하세요!",
+"여행지 3곳을 말하세요!",
 "놀이공원에서 볼 수 있는 것 3가지를 말하세요!",
-"해변에서 볼 수 있는 것 3가지를 말하세요!",
-"산에서 볼 수 있는 것 3가지를 말하세요!",
+"병원에서 볼 수 있는 것 3가지를 말하세요!",
+"마트에서 살 수 있는 것 3가지를 말하세요!",
+"문방구에서 살 수 있는 것 3가지를 말하세요!",
+"운동할 때 사용하는 물건 3가지를 말하세요!",
+"게임할 때 사용하는 장비 3가지를 말하세요!",
+"아침에 하는 일 3가지를 말하세요!",
+"학교 가기 전에 하는 일 3가지를 말하세요!",
+"주말에 할 수 있는 일 3가지를 말하세요!",
+"친구와 할 수 있는 놀이 3가지를 말하세요!",
+"집에서 할 수 있는 취미 3가지를 말하세요!",
+"밖에서 할 수 있는 활동 3가지를 말하세요!",
+"여행 중 찍을 만한 것 3가지를 말하세요!",
+"편의점 음식 3가지를 말하세요!",
+"급식에서 나올 수 있는 음식 3가지를 말하세요!",
+"카페에서 주문할 수 있는 음료 3가지를 말하세요!",
 
-"빨리 달리는 것 3가지를 말하세요!",
-"느리게 움직이는 것 3가지를 말하세요!",
-"소리가 큰 것 3가지를 말하세요!",
-"조용한 곳 3가지를 말하세요!",
-"차가운 것 3가지를 말하세요!",
-"뜨거운 것 3가지를 말하세요!",
-"무거운 것 3가지를 말하세요!",
-"가벼운 것 3가지를 말하세요!",
-"큰 것 3가지를 말하세요!",
-"작은 것 3가지를 말하세요!",
-
-"파란색인 것 3가지를 말하세요!",
-"초록색인 것 3가지를 말하세요!",
-"노란색인 것 3가지를 말하세요!",
-"검은색인 것 3가지를 말하세요!",
-"하얀색인 것 3가지를 말하세요!",
-"네모난 것 3가지를 말하세요!",
-"길쭉한 것 3가지를 말하세요!",
-"부드러운 것 3가지를 말하세요!",
-"딱딱한 것 3가지를 말하세요!",
-"반짝이는 것 3가지를 말하세요!",
-
-"쉬는 시간에 할 수 있는 것 3가지를 말하세요!",
-"방학에 할 수 있는 것 3가지를 말하세요!",
-"친구와 할 수 있는 것 3가지를 말하세요!",
-"혼자 할 수 있는 취미 3가지를 말하세요!",
-"선물로 줄 수 있는 것 3가지를 말하세요!",
-"가방 안에 있을 법한 것 3가지를 말하세요!",
-"주머니에 넣을 수 있는 것 3가지를 말하세요!",
-"책상 위에 있을 법한 것 3가지를 말하세요!",
+"ㄱ으로 시작하는 단어 3개를 말하세요!",
+"ㅅ으로 시작하는 단어 3개를 말하세요!",
+"ㅂ으로 시작하는 단어 3개를 말하세요!",
+"ㅈ으로 시작하는 단어 3개를 말하세요!",
+"ㅁ으로 시작하는 단어 3개를 말하세요!",
+"두 글자인 동물 3가지를 말하세요!",
+"세 글자인 음식 3가지를 말하세요!",
+"원형인 물건 3가지를 말하세요!",
+"네모난 물건 3가지를 말하세요!",
+"학교에 있지만 공부와 직접 관련 없는 것 3가지를 말하세요!",
+"소리가 나는 물건 3가지를 말하세요!",
+"빛이 나는 물건 3가지를 말하세요!",
+"화면이 있는 물건 3가지를 말하세요!",
+"손으로 사용하는 도구 3가지를 말하세요!",
+"한 손으로 들 수 있는 물건 3가지를 말하세요!",
+"여행 가방에 넣을 물건 3가지를 말하세요!",
+"학교에서 잃어버리기 쉬운 물건 3가지를 말하세요!",
 "밤에 볼 수 있는 것 3가지를 말하세요!",
-"아침에 볼 수 있는 것 3가지를 말하세요!"
+"아침에 볼 수 있는 것 3가지를 말하세요!",
+"겨울에 떠올리기 쉬운 것 3가지를 말하세요!",
+"여름에 떠올리기 쉬운 것 3가지를 말하세요!",
+"영화관에서 볼 수 있는 것 3가지를 말하세요!",
+"공항에서 볼 수 있는 것 3가지를 말하세요!",
+"기차역에서 볼 수 있는 것 3가지를 말하세요!",
+"도서관에서 볼 수 있는 것 3가지를 말하세요!",
+"물에 뜨는 것 3가지를 말하세요!",
+"빠르게 움직이는 것 3가지를 말하세요!",
+"천천히 움직이는 것 3가지를 말하세요!",
+"추울 때 생각나는 것 3가지를 말하세요!",
+"더울 때 생각나는 것 3가지를 말하세요!"
 
 ];
 
 
-/* =========================================
-   상태
-========================================= */
+/* =========================
+   GAME STATE
+========================= */
 
-let scores = [0,0];
-
+let currentRound = 0;
 let currentPlayer = 0;
 
+let scores = [0,0];
+let combos = [0,0];
+let bestCombos = [0,0];
+
+let successCounts = [0,0];
+let failCounts = [0,0];
+
+let totalTimes = [0,0];
+
+let selectedDifficulty = "easy";
+
 let running = false;
+let waitingForResult = false;
 
 let timerStart = 0;
-
 let animationFrame = null;
 
-let questionUsed = [];
+let currentLimit = 5;
+let currentEvent = null;
+let currentQuestion = "";
+
+let usedQuestions = new Set();
 
 
-/* =========================================
-   요소
-========================================= */
+/* =========================
+   ELEMENTS
+========================= */
 
 const questionEl =
-    document.getElementById("question");
-
-const turnEl =
-    document.getElementById("turn");
+  document.getElementById("question");
 
 const timerEl =
-    document.getElementById("timer");
+  document.getElementById("timer");
 
-const ring =
-    document.getElementById("ring");
+const ringEl =
+  document.getElementById("ring");
 
 const startBtn =
-    document.getElementById("startBtn");
-
-const result =
-    document.getElementById("result");
+  document.getElementById("startBtn");
 
 const successBtn =
-    document.getElementById("successBtn");
+  document.getElementById("successBtn");
 
 const failBtn =
-    document.getElementById("failBtn");
+  document.getElementById("failBtn");
 
-const nextBtn =
-    document.getElementById("nextBtn");
+const resultButtons =
+  document.getElementById("resultButtons");
 
-const countdown =
-    document.getElementById("countdown");
+const eventText =
+  document.getElementById("eventText");
+
+const statusEl =
+  document.getElementById("status");
+
+const countdownEl =
+  document.getElementById("countdown");
 
 const countNumber =
-    document.getElementById("countNumber");
+  document.getElementById("countNumber");
 
-const card =
-    document.getElementById("card");
+const announceEl =
+  document.getElementById("announce");
 
-const end =
-    document.getElementById("end");
+const announceText =
+  document.getElementById("announceText");
 
-const winner =
-    document.getElementById("winner");
+const gameCard =
+  document.getElementById("gameCard");
 
-const finalScore =
-    document.getElementById("finalScore");
+const roundText =
+  document.getElementById("roundText");
 
-const player1Box =
-    document.getElementById("player1Box");
+const turnText =
+  document.getElementById("turnText");
 
-const player2Box =
-    document.getElementById("player2Box");
+const playerCards = [
 
-const score1 =
-    document.getElementById("score1");
+  document.getElementById("playerCard0"),
 
-const score2 =
-    document.getElementById("score2");
+  document.getElementById("playerCard1")
 
-const restartBtn =
-    document.getElementById("restartBtn");
+];
 
 
-/* =========================================
-   소리
-========================================= */
+/* =========================
+   DIFFICULTY
+========================= */
 
-const AudioContext =
-    window.AudioContext ||
-    window.webkitAudioContext;
+document
+.querySelectorAll(".diff-btn")
+.forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    if(running || waitingForResult) return;
+
+    selectedDifficulty =
+      btn.dataset.diff;
+
+    document
+      .querySelectorAll(".diff-btn")
+      .forEach(b =>
+        b.classList.remove("active")
+      );
+
+    btn.classList.add("active");
+
+    statusEl.textContent =
+      selectedDifficulty.toUpperCase() +
+      " 난이도가 선택되었습니다.";
+
+  });
+
+});
+
+
+/* =========================
+   QUESTION RANGE
+========================= */
+
+function getDifficultyRange(diff){
+
+  if(diff === "easy"){
+    return [0,29];
+  }
+
+  if(diff === "normal"){
+    return [30,69];
+  }
+
+  return [70,99];
+
+}
+
+
+/* =========================
+   GET QUESTION
+========================= */
+
+function getQuestion(){
+
+  let difficulty =
+    selectedDifficulty;
+
+  if(
+    currentEvent &&
+    currentEvent.type === "random"
+  ){
+
+    const list = [
+      "easy",
+      "normal",
+      "hard"
+    ];
+
+    difficulty =
+      list[
+        Math.floor(
+          Math.random()*list.length
+        )
+      ];
+
+  }
+
+  const range =
+    getDifficultyRange(difficulty);
+
+  let candidates = [];
+
+  for(
+    let i=range[0];
+    i<=range[1];
+    i++
+  ){
+
+    if(!usedQuestions.has(i)){
+      candidates.push(i);
+    }
+
+  }
+
+  /*
+    해당 난이도가 전부 사용됐다면
+    남은 문제 중에서 선택
+  */
+
+  if(candidates.length === 0){
+
+    for(
+      let i=0;
+      i<questions.length;
+      i++
+    ){
+
+      if(!usedQuestions.has(i)){
+        candidates.push(i);
+      }
+
+    }
+
+  }
+
+  if(candidates.length === 0){
+    return null;
+  }
+
+  const index =
+    candidates[
+      Math.floor(
+        Math.random()*candidates.length
+      )
+    ];
+
+  usedQuestions.add(index);
+
+  return questions[index];
+
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+
+const events = [
+
+  {
+    type:"short",
+    text:"⚡ 3초 준다!",
+    limit:3,
+    bonus:1
+  },
+
+  {
+    type:"long",
+    text:"🐢 7초 준다!",
+    limit:7,
+    bonus:1
+  },
+
+  {
+    type:"double",
+    text:"💰 DOUBLE POINT!",
+    limit:5,
+    bonus:2
+  },
+
+  {
+    type:"random",
+    text:"🎲 RANDOM DIFFICULTY",
+    limit:5,
+    bonus:1
+  },
+
+  {
+    type:"normal",
+    text:"🔥 NORMAL ROUND",
+    limit:5,
+    bonus:1
+  }
+
+];
+
+
+function chooseEvent(){
+
+  currentEvent = null;
+
+  if(Math.random() < 0.25){
+
+    currentEvent =
+      events[
+        Math.floor(
+          Math.random()*events.length
+        )
+      ];
+
+  }
+
+  if(currentEvent){
+
+    currentLimit =
+      currentEvent.limit;
+
+    eventText.textContent =
+      currentEvent.text;
+
+    if(
+      currentEvent.type === "short"
+    ){
+
+      eventText.className =
+        "event hot";
+
+    }
+    else if(
+      currentEvent.type === "double"
+    ){
+
+      eventText.className =
+        "event good";
+
+    }
+    else{
+
+      eventText.className =
+        "event";
+
+    }
+
+  }
+  else{
+
+    currentLimit = 5;
+
+    eventText.textContent =
+      "NORMAL";
+
+    eventText.className =
+      "event";
+
+  }
+
+}
+
+
+/* =========================
+   PLAYER UI
+========================= */
+
+function updatePlayers(){
+
+  for(let i=0;i<2;i++){
+
+    document.getElementById(
+      "score"+i
+    ).textContent =
+      scores[i];
+
+    document.getElementById(
+      "combo"+i
+    ).textContent =
+      combos[i];
+
+    document.getElementById(
+      "success"+i
+    ).textContent =
+      successCounts[i];
+
+    playerCards[i]
+      .classList
+      .toggle(
+        "active",
+        i === currentPlayer
+      );
+
+  }
+
+}
+
+
+function updateRoundUI(){
+
+  roundText.textContent =
+    `ROUND ${currentRound + 1} / 100`;
+
+  turnText.textContent =
+    `PLAYER ${currentPlayer + 1}의 차례`;
+
+  updatePlayers();
+
+}
+
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+function startCountdown(){
+
+  let count = 3;
+
+  countdownEl.classList.add("show");
+
+  countNumber.textContent =
+    count;
+
+  const interval =
+    setInterval(() => {
+
+      count--;
+
+      if(count <= 0){
+
+        clearInterval(interval);
+
+        countdownEl.classList.remove("show");
+
+        beginRound();
+
+        return;
+
+      }
+
+      countNumber.textContent =
+        count;
+
+      countNumber.style.animation =
+        "none";
+
+      void countNumber.offsetWidth;
+
+      countNumber.style.animation =
+        "";
+
+    },1000);
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+startBtn.addEventListener(
+  "click",
+  () => {
+
+    if(
+      running ||
+      waitingForResult
+    ){
+      return;
+    }
+
+    if(currentRound >= 100){
+
+      finishGame();
+
+      return;
+
+    }
+
+    startBtn.disabled = true;
+
+    questionEl.textContent = "";
+
+    questionEl.classList.add(
+      "hidden"
+    );
+
+    resultButtons.classList.add(
+      "hidden"
+    );
+
+    statusEl.textContent =
+      "준비하세요...";
+
+    chooseEvent();
+
+    startCountdown();
+
+  }
+);
+
+
+/* =========================
+   BEGIN ROUND
+========================= */
+
+function beginRound(){
+
+  currentQuestion =
+    getQuestion();
+
+  if(!currentQuestion){
+
+    finishGame();
+
+    return;
+
+  }
+
+  /*
+    카운트다운이 끝난 직후
+    질문 공개
+  */
+
+  questionEl.textContent =
+    currentQuestion;
+
+  questionEl.classList.remove(
+    "hidden"
+  );
+
+  running = true;
+
+  waitingForResult = false;
+
+  timerStart =
+    performance.now();
+
+  timerEl.classList.remove(
+    "warning"
+  );
+
+  statusEl.textContent =
+    `${currentLimit}초 동안 답하세요!`;
+
+  beep(700,0.08);
+
+  updateTimer();
+
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+function updateTimer(){
+
+  if(!running) return;
+
+  const elapsed =
+    (
+      performance.now() -
+      timerStart
+    ) / 1000;
+
+  const remain =
+    Math.max(
+      0,
+      currentLimit - elapsed
+    );
+
+  timerEl.textContent =
+    remain.toFixed(2);
+
+  const percent =
+    remain / currentLimit;
+
+  ringEl.style.background =
+    `conic-gradient(
+      #72a7ff ${percent*360}deg,
+      #202945 0deg
+    )`;
+
+  if(remain <= 1){
+
+    timerEl.classList.add(
+      "warning"
+    );
+
+  }
+
+  /*
+    여기서는 시간이 끝났다고
+    성공/실패를 자동 판정하지 않는다.
+  */
+
+  if(remain <= 0){
+
+    timerEl.textContent =
+      "0.00";
+
+    timerFinished();
+
+    return;
+
+  }
+
+  animationFrame =
+    requestAnimationFrame(
+      updateTimer
+    );
+
+}
+
+
+/* =========================
+   TIMER FINISHED
+========================= */
+
+function timerFinished(){
+
+  if(!running) return;
+
+  running = false;
+
+  cancelAnimationFrame(
+    animationFrame
+  );
+
+  timerEl.textContent =
+    "0.00";
+
+  timerEl.classList.remove(
+    "warning"
+  );
+
+  ringEl.style.background =
+    "conic-gradient(#ffb84d 0deg,#202945 0deg)";
+
+  waitingForResult = true;
+
+  /*
+    여기서부터 인간이 판정
+  */
+
+  resultButtons.classList.remove(
+    "hidden"
+  );
+
+  startBtn.disabled = true;
+
+  statusEl.textContent =
+    "시간 종료! 실제 결과를 선택하세요.";
+
+  showAnnounce(
+    "TIME UP",
+    "#ffb84d"
+  );
+
+  beep(300,0.2);
+
+}
+
+
+/* =========================
+   HUMAN SUCCESS
+========================= */
+
+successBtn.addEventListener(
+  "click",
+  () => {
+
+    if(!waitingForResult){
+      return;
+    }
+
+    processResult(true);
+
+  }
+);
+
+
+/* =========================
+   HUMAN FAIL
+========================= */
+
+failBtn.addEventListener(
+  "click",
+  () => {
+
+    if(!waitingForResult){
+      return;
+    }
+
+    processResult(false);
+
+  }
+);
+
+
+/* =========================
+   PROCESS RESULT
+========================= */
+
+function processResult(success){
+
+  waitingForResult = false;
+
+  resultButtons.classList.add(
+    "hidden"
+  );
+
+  /*
+    평균 시간에는 실제 제한시간을 사용
+    (시간이 끝난 뒤 판정하는 방식이므로)
+  */
+
+  totalTimes[currentPlayer] +=
+    currentLimit;
+
+  if(success){
+
+    successCounts[currentPlayer]++;
+
+    combos[currentPlayer]++;
+
+    bestCombos[currentPlayer] =
+      Math.max(
+        bestCombos[currentPlayer],
+        combos[currentPlayer]
+      );
+
+    const point =
+      currentEvent &&
+      currentEvent.bonus === 2
+        ? 2
+        : 1;
+
+    scores[currentPlayer] +=
+      point;
+
+    showAnnounce(
+      point === 2
+        ? "SUCCESS +2"
+        : "SUCCESS",
+      "#63e6a5"
+    );
+
+    gameCard.classList.add(
+      "flash"
+    );
+
+    createParticles();
+
+    setTimeout(() => {
+
+      gameCard.classList.remove(
+        "flash"
+      );
+
+    },450);
+
+    if(
+      combos[currentPlayer] >= 2
+    ){
+
+      setTimeout(() => {
+
+        showAnnounce(
+          `${combos[currentPlayer]} COMBO!`,
+          "#ffd166"
+        );
+
+      },500);
+
+    }
+
+    beep(1000,0.12);
+
+  }
+  else{
+
+    failCounts[currentPlayer]++;
+
+    combos[currentPlayer] = 0;
+
+    showAnnounce(
+      "FAIL",
+      "#ff626f"
+    );
+
+    gameCard.classList.add(
+      "shake"
+    );
+
+    setTimeout(() => {
+
+      gameCard.classList.remove(
+        "shake"
+      );
+
+    },450);
+
+    beep(180,0.25);
+
+  }
+
+  updatePlayers();
+
+  setTimeout(
+    nextRound,
+    900
+  );
+
+}
+
+
+/* =========================
+   NEXT ROUND
+========================= */
+
+function nextRound(){
+
+  currentRound++;
+
+  if(currentRound >= 100){
+
+    finishGame();
+
+    return;
+
+  }
+
+  /*
+    P1 → P2 → P1 → P2
+  */
+
+  currentPlayer =
+    currentRound % 2;
+
+  questionEl.textContent =
+    "";
+
+  questionEl.classList.add(
+    "hidden"
+  );
+
+  timerEl.textContent =
+    "5.00";
+
+  ringEl.style.background =
+    "conic-gradient(#72a7ff 360deg,#202945 0deg)";
+
+  eventText.textContent =
+    "READY";
+
+  eventText.className =
+    "event";
+
+  startBtn.disabled = false;
+
+  waitingForResult = false;
+
+  statusEl.textContent =
+    "도전 시작을 누르세요.";
+
+  updateRoundUI();
+
+}
+
+
+/* =========================
+   ANNOUNCE
+========================= */
+
+function showAnnounce(
+  text,
+  color
+){
+
+  announceText.textContent =
+    text;
+
+  announceText.style.color =
+    color;
+
+  announceEl.classList.add(
+    "show"
+  );
+
+  setTimeout(() => {
+
+    announceEl.classList.remove(
+      "show"
+    );
+
+  },700);
+
+}
+
+
+/* =========================
+   PARTICLES
+========================= */
+
+function createParticles(){
+
+  for(let i=0;i<30;i++){
+
+    const p =
+      document.createElement(
+        "div"
+      );
+
+    p.className =
+      "particle";
+
+    p.style.left =
+      "50%";
+
+    p.style.top =
+      "50%";
+
+    p.style.setProperty(
+      "--x",
+      `${Math.random()*500-250}px`
+    );
+
+    p.style.setProperty(
+      "--y",
+      `${Math.random()*500-250}px`
+    );
+
+    document
+      .getElementById("particles")
+      .appendChild(p);
+
+    setTimeout(
+      () => p.remove(),
+      850
+    );
+
+  }
+
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+function finishGame(){
+
+  running = false;
+
+  waitingForResult = false;
+
+  cancelAnimationFrame(
+    animationFrame
+  );
+
+  startBtn.disabled = true;
+
+  resultButtons.classList.add(
+    "hidden"
+  );
+
+  for(let i=0;i<2;i++){
+
+    document.getElementById(
+      "finalScore"+i
+    ).textContent =
+      `${scores[i]} POINT`;
+
+    document.getElementById(
+      "finalSuccess"+i
+    ).textContent =
+      successCounts[i];
+
+    document.getElementById(
+      "finalFail"+i
+    ).textContent =
+      failCounts[i];
+
+    document.getElementById(
+      "finalBest"+i
+    ).textContent =
+      bestCombos[i];
+
+    const rounds =
+      successCounts[i] +
+      failCounts[i];
+
+    const avg =
+      rounds > 0
+        ? totalTimes[i] / rounds
+        : 0;
+
+    document.getElementById(
+      "finalAvg"+i
+    ).textContent =
+      `${avg.toFixed(2)}초`;
+
+  }
+
+  if(scores[0] > scores[1]){
+
+    document.getElementById(
+      "resultMessage"
+    ).textContent =
+      "PLAYER 1이 더 많은 점수를 기록했습니다!";
+
+  }
+  else if(scores[1] > scores[0]){
+
+    document.getElementById(
+      "resultMessage"
+    ).textContent =
+      "PLAYER 2가 더 많은 점수를 기록했습니다!";
+
+  }
+  else{
+
+    document.getElementById(
+      "resultMessage"
+    ).textContent =
+      "DRAW — 두 플레이어의 점수가 같습니다!";
+
+  }
+
+  setTimeout(() => {
+
+    document
+      .getElementById("endScreen")
+      .classList.add("show");
+
+  },500);
+
+}
+
+
+/* =========================
+   SOUND
+========================= */
 
 let audioCtx = null;
 
-function sound(freq=700,duration=.12){
+function beep(
+  freq,
+  duration
+){
 
-    if(!AudioContext) return;
+  try{
 
-    if(!audioCtx)
-        audioCtx = new AudioContext();
+    if(!audioCtx){
 
-    if(audioCtx.state === "suspended")
-        audioCtx.resume();
+      audioCtx =
+        new (
+          window.AudioContext ||
+          window.webkitAudioContext
+        )();
+
+    }
 
     const osc =
-        audioCtx.createOscillator();
+      audioCtx.createOscillator();
 
     const gain =
-        audioCtx.createGain();
+      audioCtx.createGain();
 
-    osc.frequency.value = freq;
+    osc.frequency.value =
+      freq;
 
-    osc.type = "sine";
+    osc.type =
+      "sine";
 
     gain.gain.setValueAtTime(
-        .001,
-        audioCtx.currentTime
+      0.06,
+      audioCtx.currentTime
     );
 
     gain.gain.exponentialRampToValueAtTime(
-        .22,
-        audioCtx.currentTime+.01
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-        .001,
-        audioCtx.currentTime+duration
+      0.001,
+      audioCtx.currentTime +
+      duration
     );
 
     osc.connect(gain);
 
-    gain.connect(audioCtx.destination);
+    gain.connect(
+      audioCtx.destination
+    );
 
     osc.start();
 
     osc.stop(
-        audioCtx.currentTime+duration
-    );
-}
-
-
-/* =========================================
-   플레이어 표시
-========================================= */
-
-function updatePlayers(){
-
-    score1.textContent = scores[0];
-
-    score2.textContent = scores[1];
-
-    if(currentPlayer === 0){
-
-        player1Box.classList.add("active");
-
-        player2Box.classList.remove("active");
-
-        turnEl.textContent =
-            "PLAYER 1 차례";
-
-    }else{
-
-        player2Box.classList.add("active");
-
-        player1Box.classList.remove("active");
-
-        turnEl.textContent =
-            "PLAYER 2 차례";
-    }
-}
-
-
-/* =========================================
-   다음 문제 준비
-========================================= */
-
-function prepareQuestion(){
-
-    if(questionUsed.length >= questions.length){
-
-        questionUsed = [];
-    }
-
-    let index;
-
-    do{
-
-        index =
-            Math.floor(
-                Math.random()*questions.length
-            );
-
-    }while(
-        questionUsed.includes(index)
+      audioCtx.currentTime +
+      duration
     );
 
-    questionUsed.push(index);
+  }
+  catch(e){}
 
-    return questions[index];
 }
 
 
-/* =========================================
-   시작
-========================================= */
-
-startBtn.addEventListener(
-    "click",
-    ()=>{
-
-        if(running) return;
-
-        startBtn.style.display = "none";
-
-        countdown.classList.add("show");
-
-        let n = 3;
-
-        countNumber.textContent = n;
-
-        sound(600,.1);
-
-        const interval =
-            setInterval(()=>{
-
-                n--;
-
-                if(n > 0){
-
-                    countNumber.textContent = n;
-
-                    sound(
-                        n === 1 ? 900 : 650,
-                        .1
-                    );
-
-                }else{
-
-                    clearInterval(interval);
-
-                    countdown.classList.remove(
-                        "show"
-                    );
-
-                    /*
-                        ★ 핵심 ★
-                        여기서 처음으로 문제를 생성한다.
-                    */
-
-                    questionEl.textContent =
-                        prepareQuestion();
-
-                    questionEl.classList.remove(
-                        "hidden"
-                    );
-
-                    startTimer();
-                }
-
-            },800);
-    }
-);
-
-
-/* =========================================
-   타이머
-========================================= */
-
-function startTimer(){
-
-    running = true;
-
-    timerStart =
-        performance.now();
-
-    timerEl.textContent = "5.00";
-
-    ring.style.setProperty(
-        "--progress",
-        "0deg"
-    );
-
-    animationFrame =
-        requestAnimationFrame(
-            updateTimer
-        );
-}
-
-
-function updateTimer(now){
-
-    if(!running) return;
-
-    const elapsed =
-        (now - timerStart) / 1000;
-
-    const remaining =
-        Math.max(0,5-elapsed);
-
-    timerEl.textContent =
-        remaining.toFixed(2);
-
-    const progress =
-        (elapsed / 5) * 360;
-
-    ring.style.setProperty(
-        "--progress",
-        `${progress}deg`
-    );
-
-    if(elapsed >= 5){
-
-        finishTimer();
-
-        return;
-    }
-
-    animationFrame =
-        requestAnimationFrame(
-            updateTimer
-        );
-}
-
-
-/* =========================================
-   종료
-========================================= */
-
-function finishTimer(){
-
-    running = false;
-
-    cancelAnimationFrame(
-        animationFrame
-    );
-
-    timerEl.textContent =
-        "0.00";
-
-    ring.style.setProperty(
-        "--progress",
-        "360deg"
-    );
-
-    sound(950,.18);
-
-    setTimeout(()=>{
-        sound(650,.15);
-    },180);
-
-    result.classList.add("show");
-}
-
-
-/* =========================================
-   성공
-========================================= */
-
-successBtn.addEventListener(
-    "click",
-    ()=>{
-
-        scores[currentPlayer]++;
-
-        updatePlayers();
-
-        card.classList.remove("shake");
-
-        void card.offsetWidth;
-
-        card.classList.add("flash");
-
-        sound(1100,.15);
-
-        result.classList.remove("show");
-
-        nextBtn.classList.add("show");
-
-        if(scores[currentPlayer] >= 10){
-
-            setTimeout(
-                endGame,
-                400
-            );
-        }
-    }
-);
-
-
-/* =========================================
-   실패
-========================================= */
-
-failBtn.addEventListener(
-    "click",
-    ()=>{
-
-        card.classList.remove("flash");
-
-        void card.offsetWidth;
-
-        card.classList.add("shake");
-
-        sound(250,.2);
-
-        result.classList.remove("show");
-
-        nextBtn.classList.add("show");
-    }
-);
-
-
-/* =========================================
-   다음 문제
-========================================= */
-
-nextBtn.addEventListener(
-    "click",
-    ()=>{
-
-        currentPlayer =
-            currentPlayer === 0
-            ? 1
-            : 0;
-
-        updatePlayers();
-
-        /*
-            문제 즉시 삭제
-        */
-
-        questionEl.textContent = "";
-
-        questionEl.classList.add(
-            "hidden"
-        );
-
-        timerEl.textContent = "5.00";
-
-        ring.style.setProperty(
-            "--progress",
-            "0deg"
-        );
-
-        startBtn.style.display =
-            "inline-block";
-
-        nextBtn.classList.remove(
-            "show"
-        );
-
-        card.classList.remove(
-            "flash",
-            "shake"
-        );
-    }
-);
-
-
-/* =========================================
-   게임 종료
-========================================= */
-
-function endGame(){
-
-    const s1 = scores[0];
-
-    const s2 = scores[1];
-
-    if(s1 > s2){
-
-        winner.textContent =
-            "🏆 PLAYER 1 승리!";
-
-    }else if(s2 > s1){
-
-        winner.textContent =
-            "🏆 PLAYER 2 승리!";
-
-    }else{
-
-        winner.textContent =
-            "🤝 무승부!";
-    }
-
-    finalScore.innerHTML =
-        `PLAYER 1　<b>${s1}</b>점<br>
-         PLAYER 2　<b>${s2}</b>점`;
-
-    end.classList.add("show");
-
-    sound(1200,.2);
-
-    setTimeout(()=>{
-        sound(1500,.25);
-    },220);
-}
-
-
-/* =========================================
-   다시 시작
-========================================= */
-
-restartBtn.addEventListener(
-    "click",
-    ()=>{
-
-        scores = [0,0];
-
-        currentPlayer = 0;
-
-        questionUsed = [];
-
-        end.classList.remove(
-            "show"
-        );
-
-        updatePlayers();
-
-        /*
-            시작 화면으로 복귀
-        */
-
-        questionEl.textContent = "";
-
-        questionEl.classList.add(
-            "hidden"
-        );
-
-        timerEl.textContent =
-            "5.00";
-
-        ring.style.setProperty(
-            "--progress",
-            "0deg"
-        );
-
-        startBtn.style.display =
-            "inline-block";
-
-        result.classList.remove(
-            "show"
-        );
-
-        nextBtn.classList.remove(
-            "show"
-        );
-    }
-);
-
-
-/* =========================================
-   초기 상태
-========================================= */
-
-updatePlayers();
-
-questionEl.textContent = "";
-
-questionEl.classList.add(
-    "hidden"
-);
-
-timerEl.textContent = "5.00";
-
-ring.style.setProperty(
-    "--progress",
-    "0deg"
-);
+/* =========================
+   INITIAL
+========================= */
+
+updateRoundUI();
 
 </script>
 
 </body>
-      </html>
+</html>
