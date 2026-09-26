@@ -24,6 +24,10 @@ body{
   overflow-x:hidden;
 }
 
+button{
+  font-family:inherit;
+}
+
 .game{
   width:min(820px,94vw);
   padding:24px 0 40px;
@@ -46,7 +50,9 @@ body{
   font-size:14px;
 }
 
-/* PLAYER */
+/* =========================
+   PLAYER
+========================= */
 
 .players{
   display:grid;
@@ -104,7 +110,9 @@ body{
   margin-top:4px;
 }
 
-/* ROUND */
+/* =========================
+   ROUND
+========================= */
 
 .round-info{
   text-align:center;
@@ -124,7 +132,9 @@ body{
   color:#79aaff;
 }
 
-/* CARD */
+/* =========================
+   CARD
+========================= */
 
 .card{
   background:rgba(15,20,36,.88);
@@ -156,7 +166,9 @@ body{
   visibility:hidden;
 }
 
-/* EVENT */
+/* =========================
+   EVENT
+========================= */
 
 .event-area{
   text-align:center;
@@ -187,7 +199,9 @@ body{
   color:#6ee7a5;
 }
 
-/* TIMER */
+/* =========================
+   TIMER
+========================= */
 
 .timer-wrap{
   display:flex;
@@ -234,7 +248,9 @@ body{
   to{transform:scale(1.09);}
 }
 
-/* BUTTON */
+/* =========================
+   BUTTON
+========================= */
 
 .main-btn{
   width:100%;
@@ -265,7 +281,9 @@ body{
   transform:none;
 }
 
-/* RESULT BUTTONS */
+/* =========================
+   RESULT BUTTONS
+========================= */
 
 .result-buttons{
   display:grid;
@@ -296,19 +314,19 @@ body{
 
 .success-btn{
   background:linear-gradient(135deg,#20b978,#35d894);
-  box-shadow:0 8px 25px rgba(50,220,150,.18);
 }
 
 .fail-btn{
   background:linear-gradient(135deg,#e34e60,#ff6877);
-  box-shadow:0 8px 25px rgba(255,80,100,.18);
 }
 
 .result-buttons.hidden{
   display:none;
 }
 
-/* DIFFICULTY */
+/* =========================
+   DIFFICULTY
+========================= */
 
 .difficulty{
   display:grid;
@@ -338,7 +356,9 @@ body{
   cursor:not-allowed;
 }
 
-/* STATUS */
+/* =========================
+   STATUS
+========================= */
 
 .status{
   text-align:center;
@@ -347,7 +367,9 @@ body{
   font-size:12px;
 }
 
-/* COUNTDOWN */
+/* =========================
+   COUNTDOWN
+========================= */
 
 .countdown{
   position:fixed;
@@ -377,16 +399,20 @@ body{
     transform:scale(1.7);
     opacity:0;
   }
+
   35%{
     opacity:1;
   }
+
   100%{
     transform:scale(1);
     opacity:1;
   }
 }
 
-/* ANNOUNCE */
+/* =========================
+   ANNOUNCE
+========================= */
 
 .announce{
   position:fixed;
@@ -427,7 +453,9 @@ body{
   }
 }
 
-/* EFFECTS */
+/* =========================
+   EFFECTS
+========================= */
 
 .flash{
   animation:flash .4s ease;
@@ -452,28 +480,16 @@ body{
 }
 
 @keyframes shake{
-  0%,100%{
-    transform:translateX(0);
-  }
-
-  20%{
-    transform:translateX(-10px);
-  }
-
-  40%{
-    transform:translateX(10px);
-  }
-
-  60%{
-    transform:translateX(-7px);
-  }
-
-  80%{
-    transform:translateX(7px);
-  }
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-10px);}
+  40%{transform:translateX(10px);}
+  60%{transform:translateX(-7px);}
+  80%{transform:translateX(7px);}
 }
 
-/* PARTICLES */
+/* =========================
+   PARTICLES
+========================= */
 
 .particles{
   position:fixed;
@@ -503,7 +519,114 @@ body{
   }
 }
 
-/* END */
+/* =========================
+   SAVE INDICATOR
+========================= */
+
+.save-indicator{
+  text-align:center;
+  margin-top:8px;
+  color:#586582;
+  font-size:10px;
+}
+
+/* =========================
+   START SCREEN
+========================= */
+
+.start-screen{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  background:
+    radial-gradient(circle at 50% 20%,#27345e,#080b15 70%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.start-box{
+  width:min(500px,94vw);
+  text-align:center;
+  background:rgba(15,20,36,.94);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:30px;
+  padding:35px 25px;
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+}
+
+.start-title{
+  font-size:clamp(38px,10vw,60px);
+  font-weight:1000;
+  letter-spacing:-3px;
+}
+
+.start-desc{
+  margin-top:8px;
+  color:#8f9ab5;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.continue-box{
+  margin-top:25px;
+  padding:16px;
+  border-radius:17px;
+  background:rgba(80,130,255,.08);
+  border:1px solid rgba(100,150,255,.15);
+}
+
+.continue-title{
+  color:#91b6ff;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:7px;
+}
+
+.continue-info{
+  color:#aab6d1;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.start-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:18px;
+}
+
+.start-option{
+  border:0;
+  border-radius:15px;
+  padding:16px 10px;
+  color:white;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.start-option:hover{
+  transform:translateY(-2px);
+}
+
+.resume-btn{
+  background:linear-gradient(135deg,#548dff,#7a63ff);
+}
+
+.new-btn{
+  background:#252d44;
+}
+
+.new-btn.danger{
+  background:linear-gradient(135deg,#454d64,#30374c);
+}
+
+/* =========================
+   END
+========================= */
 
 .end{
   position:fixed;
@@ -600,6 +723,10 @@ body{
   font-weight:900;
 }
 
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
 
   .game{
@@ -635,28 +762,101 @@ body{
 
 <body>
 
-<div class="game">
+<!-- =========================
+     START / LOAD SCREEN
+========================= -->
+
+<div class="start-screen" id="startScreen">
+
+  <div class="start-box">
+
+    <div class="start-title">
+      5초 준다!
+    </div>
+
+    <div class="start-desc">
+      2 PLAYER · 총 100 ROUND<br>
+      시간이 끝난 뒤 사람이 직접 성공 / 실패를 판정합니다.
+    </div>
+
+    <div
+      class="continue-box"
+      id="continueBox"
+      style="display:none;"
+    >
+
+      <div class="continue-title">
+        💾 저장된 게임 발견
+      </div>
+
+      <div
+        class="continue-info"
+        id="continueInfo">
+      </div>
+
+    </div>
+
+    <div class="start-buttons">
+
+      <button
+        class="start-option resume-btn"
+        id="resumeBtn"
+        style="display:none;">
+        ▶ 이어하기
+      </button>
+
+      <button
+        class="start-option new-btn"
+        id="newGameBtn">
+        🆕 새 게임
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     GAME
+========================= -->
+
+<div class="game" id="game">
 
   <div class="header">
-    <h1>5초 준다!</h1>
-    <p>2 PLAYER · 총 100 ROUND</p>
+
+    <h1>
+      5초 준다!
+    </h1>
+
+    <p>
+      2 PLAYER · 총 100 ROUND
+    </p>
+
   </div>
+
 
   <!-- PLAYER SCORE -->
 
   <div class="players">
 
-    <div class="player active" id="playerCard0">
+    <div
+      class="player active"
+      id="playerCard0">
 
       <div class="player-name">
         PLAYER 1
       </div>
 
-      <div class="player-score" id="score0">
+      <div
+        class="player-score"
+        id="score0">
         0
       </div>
 
       <div class="player-bottom">
+
         <span>
           콤보 <b id="combo0">0</b>
         </span>
@@ -664,21 +864,28 @@ body{
         <span>
           성공 <b id="success0">0</b>
         </span>
+
       </div>
 
     </div>
 
-    <div class="player" id="playerCard1">
+
+    <div
+      class="player"
+      id="playerCard1">
 
       <div class="player-name">
         PLAYER 2
       </div>
 
-      <div class="player-score" id="score1">
+      <div
+        class="player-score"
+        id="score1">
         0
       </div>
 
       <div class="player-bottom">
+
         <span>
           콤보 <b id="combo1">0</b>
         </span>
@@ -686,43 +893,67 @@ body{
         <span>
           성공 <b id="success1">0</b>
         </span>
+
       </div>
 
     </div>
 
   </div>
 
+
   <div class="round-info">
 
-    <div class="round" id="roundText">
+    <div
+      class="round"
+      id="roundText">
       ROUND 1 / 100
     </div>
 
-    <div class="turn" id="turnText">
+    <div
+      class="turn"
+      id="turnText">
       PLAYER 1의 차례
     </div>
 
   </div>
 
-  <div class="card" id="gameCard">
+
+  <!-- GAME CARD -->
+
+  <div
+    class="card"
+    id="gameCard">
 
     <div class="event-area">
-      <div class="event" id="eventText">
+
+      <div
+        class="event"
+        id="eventText">
         READY
       </div>
+
     </div>
+
 
     <div class="question-area">
 
-      <div class="question hidden" id="question"></div>
+      <div
+        class="question hidden"
+        id="question">
+      </div>
 
     </div>
 
+
     <div class="timer-wrap">
 
-      <div class="ring" id="ring">
+      <div
+        class="ring"
+        id="ring">
 
-        <div class="timer" id="timer">
+        <div
+          class="timer"
+          id="timer">
           5.00
         </div>
 
@@ -730,15 +961,21 @@ body{
 
     </div>
 
+
     <!-- START -->
 
-    <button class="main-btn" id="startBtn">
+    <button
+      class="main-btn"
+      id="startBtn">
       도전 시작
     </button>
 
-    <!-- SUCCESS / FAIL -->
 
-    <div class="result-buttons hidden" id="resultButtons">
+    <!-- HUMAN RESULT -->
+
+    <div
+      class="result-buttons hidden"
+      id="resultButtons">
 
       <button
         class="result-btn success-btn"
@@ -753,6 +990,9 @@ body{
       </button>
 
     </div>
+
+
+    <!-- DIFFICULTY -->
 
     <div class="difficulty">
 
@@ -776,8 +1016,16 @@ body{
 
     </div>
 
-    <div class="status" id="status">
+
+    <div
+      class="status"
+      id="status">
       문제는 시작할 때까지 공개되지 않습니다.
+    </div>
+
+
+    <div class="save-indicator">
+      💾 진행 상황 자동 저장
     </div>
 
   </div>
@@ -787,9 +1035,13 @@ body{
 
 <!-- COUNTDOWN -->
 
-<div class="countdown" id="countdown">
+<div
+  class="countdown"
+  id="countdown">
 
-  <div class="count-number" id="countNumber">
+  <div
+    class="count-number"
+    id="countNumber">
     3
   </div>
 
@@ -798,19 +1050,31 @@ body{
 
 <!-- ANNOUNCE -->
 
-<div class="announce" id="announce">
+<div
+  class="announce"
+  id="announce">
 
-  <div class="announce-text" id="announceText"></div>
+  <div
+    class="announce-text"
+    id="announceText">
+  </div>
 
 </div>
 
 
-<div class="particles" id="particles"></div>
+<div
+  class="particles"
+  id="particles">
+</div>
 
 
-<!-- FINAL -->
+<!-- =========================
+     FINAL SCREEN
+========================= -->
 
-<div class="end" id="endScreen">
+<div
+  class="end"
+  id="endScreen">
 
   <div class="end-box">
 
@@ -822,13 +1086,16 @@ body{
       100 ROUND 모두 완료!
     </div>
 
+
     <div class="final-players">
 
       <!-- P1 -->
 
       <div class="final-player">
 
-        <h3>PLAYER 1</h3>
+        <h3>
+          PLAYER 1
+        </h3>
 
         <div
           class="final-score"
@@ -839,6 +1106,7 @@ body{
         <div class="stats">
 
           <div class="stat">
+
             <div class="stat-label">
               성공
             </div>
@@ -848,9 +1116,12 @@ body{
               id="finalSuccess0">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               실패
             </div>
@@ -860,9 +1131,12 @@ body{
               id="finalFail0">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               최고 콤보
             </div>
@@ -872,9 +1146,12 @@ body{
               id="finalBest0">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               평균 시간
             </div>
@@ -884,6 +1161,7 @@ body{
               id="finalAvg0">
               0.00초
             </div>
+
           </div>
 
         </div>
@@ -895,7 +1173,9 @@ body{
 
       <div class="final-player">
 
-        <h3>PLAYER 2</h3>
+        <h3>
+          PLAYER 2
+        </h3>
 
         <div
           class="final-score"
@@ -906,6 +1186,7 @@ body{
         <div class="stats">
 
           <div class="stat">
+
             <div class="stat-label">
               성공
             </div>
@@ -915,9 +1196,12 @@ body{
               id="finalSuccess1">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               실패
             </div>
@@ -927,9 +1211,12 @@ body{
               id="finalFail1">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               최고 콤보
             </div>
@@ -939,9 +1226,12 @@ body{
               id="finalBest1">
               0
             </div>
+
           </div>
 
+
           <div class="stat">
+
             <div class="stat-label">
               평균 시간
             </div>
@@ -951,6 +1241,7 @@ body{
               id="finalAvg1">
               0.00초
             </div>
+
           </div>
 
         </div>
@@ -959,16 +1250,18 @@ body{
 
     </div>
 
+
     <div
       class="result-message"
       id="resultMessage">
       GAME OVER
     </div>
 
+
     <button
       class="main-btn"
-      onclick="location.reload()">
-      다시 플레이
+      id="restartBtn">
+      새 게임
     </button>
 
   </div>
@@ -978,9 +1271,9 @@ body{
 
 <script>
 
-/* =========================
+/* =========================================================
    QUESTION BANK
-========================= */
+========================================================= */
 
 const questions = [
 
@@ -1091,23 +1384,145 @@ const questions = [
 ];
 
 
-/* =========================
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+const SAVE_KEY =
+  "fiveSecondRule_2Player_Save_v1";
+
+
+function hasSave(){
+
+  return localStorage.getItem(SAVE_KEY) !== null;
+
+}
+
+
+function saveGame(){
+
+  const saveData = {
+
+    version:1,
+
+    currentRound,
+    currentPlayer,
+
+    scores,
+    combos,
+    bestCombos,
+
+    successCounts,
+    failCounts,
+
+    totalTimes,
+
+    selectedDifficulty,
+
+    usedQuestions:[
+      ...usedQuestions
+    ]
+
+  };
+
+  localStorage.setItem(
+    SAVE_KEY,
+    JSON.stringify(saveData)
+  );
+
+}
+
+
+function loadGame(){
+
+  const raw =
+    localStorage.getItem(SAVE_KEY);
+
+  if(!raw){
+    return false;
+  }
+
+  try{
+
+    const data =
+      JSON.parse(raw);
+
+    currentRound =
+      Number(data.currentRound) || 0;
+
+    currentPlayer =
+      Number(data.currentPlayer) || 0;
+
+    scores =
+      Array.isArray(data.scores)
+        ? data.scores
+        : [0,0];
+
+    combos =
+      Array.isArray(data.combos)
+        ? data.combos
+        : [0,0];
+
+    bestCombos =
+      Array.isArray(data.bestCombos)
+        ? data.bestCombos
+        : [0,0];
+
+    successCounts =
+      Array.isArray(data.successCounts)
+        ? data.successCounts
+        : [0,0];
+
+    failCounts =
+      Array.isArray(data.failCounts)
+        ? data.failCounts
+        : [0,0];
+
+    totalTimes =
+      Array.isArray(data.totalTimes)
+        ? data.totalTimes
+        : [0,0];
+
+    selectedDifficulty =
+      data.selectedDifficulty ||
+      "easy";
+
+    usedQuestions =
+      new Set(
+        Array.isArray(data.usedQuestions)
+          ? data.usedQuestions
+          : []
+      );
+
+    return true;
+
+  }
+  catch(error){
+
+    console.error(
+      "저장 데이터 불러오기 실패:",
+      error
+    );
+
+    return false;
+
+  }
+
+}
+
+
+function clearSave(){
+
+  localStorage.removeItem(
+    SAVE_KEY
+  );
+
+}
+
+
+/* =========================================================
    GAME STATE
-========================= */
-
-let currentRound = 0;
-let currentPlayer = 0;
-
-let scores = [0,0];
-let combos = [0,0];
-let bestCombos = [0,0];
-
-let successCounts = [0,0];
-let failCounts = [0,0];
-
-let totalTimes = [0,0];
-
-let selectedDifficulty = "easy";
+========================================================= */
 
 let running = false;
 let waitingForResult = false;
@@ -1119,105 +1534,306 @@ let currentLimit = 5;
 let currentEvent = null;
 let currentQuestion = "";
 
-let usedQuestions = new Set();
 
-
-/* =========================
+/* =========================================================
    ELEMENTS
-========================= */
+========================================================= */
+
+const startScreen =
+  document.getElementById(
+    "startScreen"
+  );
+
+const continueBox =
+  document.getElementById(
+    "continueBox"
+  );
+
+const continueInfo =
+  document.getElementById(
+    "continueInfo"
+  );
+
+const resumeBtn =
+  document.getElementById(
+    "resumeBtn"
+  );
+
+const newGameBtn =
+  document.getElementById(
+    "newGameBtn"
+  );
 
 const questionEl =
-  document.getElementById("question");
+  document.getElementById(
+    "question"
+  );
 
 const timerEl =
-  document.getElementById("timer");
+  document.getElementById(
+    "timer"
+  );
 
 const ringEl =
-  document.getElementById("ring");
+  document.getElementById(
+    "ring"
+  );
 
 const startBtn =
-  document.getElementById("startBtn");
+  document.getElementById(
+    "startBtn"
+  );
 
 const successBtn =
-  document.getElementById("successBtn");
+  document.getElementById(
+    "successBtn"
+  );
 
 const failBtn =
-  document.getElementById("failBtn");
+  document.getElementById(
+    "failBtn"
+  );
 
 const resultButtons =
-  document.getElementById("resultButtons");
+  document.getElementById(
+    "resultButtons"
+  );
 
 const eventText =
-  document.getElementById("eventText");
+  document.getElementById(
+    "eventText"
+  );
 
 const statusEl =
-  document.getElementById("status");
+  document.getElementById(
+    "status"
+  );
 
 const countdownEl =
-  document.getElementById("countdown");
+  document.getElementById(
+    "countdown"
+  );
 
 const countNumber =
-  document.getElementById("countNumber");
+  document.getElementById(
+    "countNumber"
+  );
 
 const announceEl =
-  document.getElementById("announce");
+  document.getElementById(
+    "announce"
+  );
 
 const announceText =
-  document.getElementById("announceText");
+  document.getElementById(
+    "announceText"
+  );
 
 const gameCard =
-  document.getElementById("gameCard");
+  document.getElementById(
+    "gameCard"
+  );
 
 const roundText =
-  document.getElementById("roundText");
+  document.getElementById(
+    "roundText"
+  );
 
 const turnText =
-  document.getElementById("turnText");
+  document.getElementById(
+    "turnText"
+  );
+
+const endScreen =
+  document.getElementById(
+    "endScreen"
+  );
 
 const playerCards = [
 
-  document.getElementById("playerCard0"),
+  document.getElementById(
+    "playerCard0"
+  ),
 
-  document.getElementById("playerCard1")
+  document.getElementById(
+    "playerCard1"
+  )
 
 ];
 
 
-/* =========================
+/* =========================================================
+   START SCREEN
+========================================================= */
+
+function setupStartScreen(){
+
+  if(hasSave()){
+
+    const data =
+      JSON.parse(
+        localStorage.getItem(
+          SAVE_KEY
+        )
+      );
+
+    continueBox.style.display =
+      "block";
+
+    resumeBtn.style.display =
+      "block";
+
+    continueInfo.innerHTML =
+      `ROUND <b>${(data.currentRound || 0) + 1}</b> / 100<br>
+       PLAYER ${(data.currentPlayer || 0) + 1}의 차례<br>
+       P1 ${data.scores?.[0] || 0}점 ·
+       P2 ${data.scores?.[1] || 0}점`;
+
+  }
+
+}
+
+
+/* =========================================================
+   NEW GAME
+========================================================= */
+
+function startNewGame(){
+
+  clearSave();
+
+  currentRound = 0;
+  currentPlayer = 0;
+
+  scores = [0,0];
+  combos = [0,0];
+  bestCombos = [0,0];
+
+  successCounts = [0,0];
+  failCounts = [0,0];
+
+  totalTimes = [0,0];
+
+  selectedDifficulty =
+    "easy";
+
+  usedQuestions =
+    new Set();
+
+  running = false;
+  waitingForResult = false;
+
+  startScreen.style.display =
+    "none";
+
+  updateDifficultyButtons();
+  resetRoundUI();
+
+  saveGame();
+
+}
+
+
+/* =========================================================
+   RESUME
+========================================================= */
+
+resumeBtn.addEventListener(
+  "click",
+  () => {
+
+    if(!loadGame()){
+
+      startNewGame();
+
+      return;
+
+    }
+
+    startScreen.style.display =
+      "none";
+
+    updateDifficultyButtons();
+
+    resetRoundUI();
+
+    statusEl.textContent =
+      "저장된 게임을 불러왔습니다.";
+
+  }
+);
+
+
+/* =========================================================
+   NEW GAME BUTTON
+========================================================= */
+
+newGameBtn.addEventListener(
+  "click",
+  () => {
+
+    startNewGame();
+
+  }
+);
+
+
+/* =========================================================
    DIFFICULTY
-========================= */
+========================================================= */
 
 document
 .querySelectorAll(".diff-btn")
 .forEach(btn => {
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener(
+    "click",
+    () => {
 
-    if(running || waitingForResult) return;
+      if(
+        running ||
+        waitingForResult
+      ){
+        return;
+      }
 
-    selectedDifficulty =
-      btn.dataset.diff;
+      selectedDifficulty =
+        btn.dataset.diff;
 
-    document
-      .querySelectorAll(".diff-btn")
-      .forEach(b =>
-        b.classList.remove("active")
-      );
+      updateDifficultyButtons();
 
-    btn.classList.add("active");
+      saveGame();
 
-    statusEl.textContent =
-      selectedDifficulty.toUpperCase() +
-      " 난이도가 선택되었습니다.";
+      statusEl.textContent =
+        selectedDifficulty.toUpperCase() +
+        " 난이도가 선택되었습니다.";
 
-  });
+    }
+  );
 
 });
 
 
-/* =========================
+function updateDifficultyButtons(){
+
+  document
+    .querySelectorAll(".diff-btn")
+    .forEach(btn => {
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.diff ===
+        selectedDifficulty
+      );
+
+    });
+
+}
+
+
+/* =========================================================
    QUESTION RANGE
-========================= */
+========================================================= */
 
 function getDifficultyRange(diff){
 
@@ -1234,9 +1850,9 @@ function getDifficultyRange(diff){
 }
 
 
-/* =========================
-   GET QUESTION
-========================= */
+/* =========================================================
+   QUESTION
+========================================================= */
 
 function getQuestion(){
 
@@ -1257,14 +1873,17 @@ function getQuestion(){
     difficulty =
       list[
         Math.floor(
-          Math.random()*list.length
+          Math.random() *
+          list.length
         )
       ];
 
   }
 
   const range =
-    getDifficultyRange(difficulty);
+    getDifficultyRange(
+      difficulty
+    );
 
   let candidates = [];
 
@@ -1281,8 +1900,8 @@ function getQuestion(){
   }
 
   /*
-    해당 난이도가 전부 사용됐다면
-    남은 문제 중에서 선택
+    선택 난이도의 문제가 모두 소진되면
+    남은 문제에서 선택
   */
 
   if(candidates.length === 0){
@@ -1308,7 +1927,8 @@ function getQuestion(){
   const index =
     candidates[
       Math.floor(
-        Math.random()*candidates.length
+        Math.random() *
+        candidates.length
       )
     ];
 
@@ -1319,9 +1939,9 @@ function getQuestion(){
 }
 
 
-/* =========================
+/* =========================================================
    EVENTS
-========================= */
+========================================================= */
 
 const events = [
 
@@ -1372,7 +1992,8 @@ function chooseEvent(){
     currentEvent =
       events[
         Math.floor(
-          Math.random()*events.length
+          Math.random() *
+          events.length
         )
       ];
 
@@ -1387,7 +2008,8 @@ function chooseEvent(){
       currentEvent.text;
 
     if(
-      currentEvent.type === "short"
+      currentEvent.type ===
+      "short"
     ){
 
       eventText.className =
@@ -1395,7 +2017,8 @@ function chooseEvent(){
 
     }
     else if(
-      currentEvent.type === "double"
+      currentEvent.type ===
+      "double"
     ){
 
       eventText.className =
@@ -1425,9 +2048,9 @@ function chooseEvent(){
 }
 
 
-/* =========================
+/* =========================================================
    PLAYER UI
-========================= */
+========================================================= */
 
 function updatePlayers(){
 
@@ -1473,55 +2096,52 @@ function updateRoundUI(){
 }
 
 
-/* =========================
-   COUNTDOWN
-========================= */
+/* =========================================================
+   RESET ROUND UI
+========================================================= */
 
-function startCountdown(){
+function resetRoundUI(){
 
-  let count = 3;
+  running = false;
+  waitingForResult = false;
 
-  countdownEl.classList.add("show");
+  questionEl.textContent = "";
 
-  countNumber.textContent =
-    count;
+  questionEl.classList.add(
+    "hidden"
+  );
 
-  const interval =
-    setInterval(() => {
+  timerEl.textContent =
+    "5.00";
 
-      count--;
+  timerEl.classList.remove(
+    "warning"
+  );
 
-      if(count <= 0){
+  ringEl.style.background =
+    "conic-gradient(#72a7ff 360deg,#202945 0deg)";
 
-        clearInterval(interval);
+  eventText.textContent =
+    "READY";
 
-        countdownEl.classList.remove("show");
+  eventText.className =
+    "event";
 
-        beginRound();
+  resultButtons.classList.add(
+    "hidden"
+  );
 
-        return;
+  startBtn.disabled =
+    false;
 
-      }
-
-      countNumber.textContent =
-        count;
-
-      countNumber.style.animation =
-        "none";
-
-      void countNumber.offsetWidth;
-
-      countNumber.style.animation =
-        "";
-
-    },1000);
+  updateRoundUI();
 
 }
 
 
-/* =========================
-   START
-========================= */
+/* =========================================================
+   START ROUND
+========================================================= */
 
 startBtn.addEventListener(
   "click",
@@ -1542,9 +2162,11 @@ startBtn.addEventListener(
 
     }
 
-    startBtn.disabled = true;
+    startBtn.disabled =
+      true;
 
-    questionEl.textContent = "";
+    questionEl.textContent =
+      "";
 
     questionEl.classList.add(
       "hidden"
@@ -1565,9 +2187,73 @@ startBtn.addEventListener(
 );
 
 
-/* =========================
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function startCountdown(){
+
+  let count = 3;
+
+  countdownEl.classList.add(
+    "show"
+  );
+
+  countNumber.textContent =
+    count;
+
+  beep(450,0.08);
+
+  const interval =
+    setInterval(
+      () => {
+
+        count--;
+
+        if(count <= 0){
+
+          clearInterval(
+            interval
+          );
+
+          countdownEl.classList.remove(
+            "show"
+          );
+
+          beginRound();
+
+          return;
+
+        }
+
+        countNumber.textContent =
+          count;
+
+        countNumber.style.animation =
+          "none";
+
+        void countNumber.offsetWidth;
+
+        countNumber.style.animation =
+          "";
+
+        beep(
+          count === 1
+            ? 700
+            : 500,
+          0.08
+        );
+
+      },
+      1000
+    );
+
+}
+
+
+/* =========================================================
    BEGIN ROUND
-========================= */
+========================================================= */
 
 function beginRound(){
 
@@ -1583,8 +2269,7 @@ function beginRound(){
   }
 
   /*
-    카운트다운이 끝난 직후
-    질문 공개
+    이 순간 처음으로 문제 공개
   */
 
   questionEl.textContent =
@@ -1595,7 +2280,6 @@ function beginRound(){
   );
 
   running = true;
-
   waitingForResult = false;
 
   timerStart =
@@ -1608,20 +2292,25 @@ function beginRound(){
   statusEl.textContent =
     `${currentLimit}초 동안 답하세요!`;
 
-  beep(700,0.08);
+  beep(
+    900,
+    0.1
+  );
 
   updateTimer();
 
 }
 
 
-/* =========================
+/* =========================================================
    TIMER
-========================= */
+========================================================= */
 
 function updateTimer(){
 
-  if(!running) return;
+  if(!running){
+    return;
+  }
 
   const elapsed =
     (
@@ -1632,14 +2321,16 @@ function updateTimer(){
   const remain =
     Math.max(
       0,
-      currentLimit - elapsed
+      currentLimit -
+      elapsed
     );
 
   timerEl.textContent =
     remain.toFixed(2);
 
   const percent =
-    remain / currentLimit;
+    remain /
+    currentLimit;
 
   ringEl.style.background =
     `conic-gradient(
@@ -1656,8 +2347,7 @@ function updateTimer(){
   }
 
   /*
-    여기서는 시간이 끝났다고
-    성공/실패를 자동 판정하지 않는다.
+    자동 성공/실패 없음
   */
 
   if(remain <= 0){
@@ -1679,13 +2369,15 @@ function updateTimer(){
 }
 
 
-/* =========================
-   TIMER FINISHED
-========================= */
+/* =========================================================
+   TIMER END
+========================================================= */
 
 function timerFinished(){
 
-  if(!running) return;
+  if(!running){
+    return;
+  }
 
   running = false;
 
@@ -1703,17 +2395,15 @@ function timerFinished(){
   ringEl.style.background =
     "conic-gradient(#ffb84d 0deg,#202945 0deg)";
 
-  waitingForResult = true;
-
-  /*
-    여기서부터 인간이 판정
-  */
+  waitingForResult =
+    true;
 
   resultButtons.classList.remove(
     "hidden"
   );
 
-  startBtn.disabled = true;
+  startBtn.disabled =
+    true;
 
   statusEl.textContent =
     "시간 종료! 실제 결과를 선택하세요.";
@@ -1723,14 +2413,17 @@ function timerFinished(){
     "#ffb84d"
   );
 
-  beep(300,0.2);
+  beep(
+    300,
+    0.2
+  );
 
 }
 
 
-/* =========================
-   HUMAN SUCCESS
-========================= */
+/* =========================================================
+   SUCCESS BUTTON
+========================================================= */
 
 successBtn.addEventListener(
   "click",
@@ -1740,15 +2433,17 @@ successBtn.addEventListener(
       return;
     }
 
-    processResult(true);
+    processResult(
+      true
+    );
 
   }
 );
 
 
-/* =========================
-   HUMAN FAIL
-========================= */
+/* =========================================================
+   FAIL BUTTON
+========================================================= */
 
 failBtn.addEventListener(
   "click",
@@ -1758,31 +2453,37 @@ failBtn.addEventListener(
       return;
     }
 
-    processResult(false);
+    processResult(
+      false
+    );
 
   }
 );
 
 
-/* =========================
-   PROCESS RESULT
-========================= */
+/* =========================================================
+   RESULT
+========================================================= */
 
-function processResult(success){
+function processResult(
+  success
+){
 
-  waitingForResult = false;
+  waitingForResult =
+    false;
 
   resultButtons.classList.add(
     "hidden"
   );
 
   /*
-    평균 시간에는 실제 제한시간을 사용
-    (시간이 끝난 뒤 판정하는 방식이므로)
+    사람이 판정 버튼을 누른 시점이 아니라
+    실제 라운드 제한시간을 기록
   */
 
   totalTimes[currentPlayer] +=
     currentLimit;
+
 
   if(success){
 
@@ -1818,37 +2519,47 @@ function processResult(success){
 
     createParticles();
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      gameCard.classList.remove(
-        "flash"
-      );
+        gameCard.classList.remove(
+          "flash"
+        );
 
-    },450);
+      },
+      450
+    );
 
     if(
       combos[currentPlayer] >= 2
     ){
 
-      setTimeout(() => {
+      setTimeout(
+        () => {
 
-        showAnnounce(
-          `${combos[currentPlayer]} COMBO!`,
-          "#ffd166"
-        );
+          showAnnounce(
+            `${combos[currentPlayer]} COMBO!`,
+            "#ffd166"
+          );
 
-      },500);
+        },
+        500
+      );
 
     }
 
-    beep(1000,0.12);
+    beep(
+      1000,
+      0.12
+    );
 
   }
   else{
 
     failCounts[currentPlayer]++;
 
-    combos[currentPlayer] = 0;
+    combos[currentPlayer] =
+      0;
 
     showAnnounce(
       "FAIL",
@@ -1859,19 +2570,32 @@ function processResult(success){
       "shake"
     );
 
-    setTimeout(() => {
+    setTimeout(
+      () => {
 
-      gameCard.classList.remove(
-        "shake"
-      );
+        gameCard.classList.remove(
+          "shake"
+        );
 
-    },450);
+      },
+      450
+    );
 
-    beep(180,0.25);
+    beep(
+      180,
+      0.25
+    );
 
   }
 
+
   updatePlayers();
+
+  /*
+    결과가 확정된 시점에 저장
+  */
+
+  saveGame();
 
   setTimeout(
     nextRound,
@@ -1881,15 +2605,21 @@ function processResult(success){
 }
 
 
-/* =========================
+/* =========================================================
    NEXT ROUND
-========================= */
+========================================================= */
 
 function nextRound(){
 
   currentRound++;
 
   if(currentRound >= 100){
+
+    /*
+      100라운드 완료
+    */
+
+    clearSave();
 
     finishGame();
 
@@ -1923,21 +2653,29 @@ function nextRound(){
   eventText.className =
     "event";
 
-  startBtn.disabled = false;
+  startBtn.disabled =
+    false;
 
-  waitingForResult = false;
+  waitingForResult =
+    false;
 
   statusEl.textContent =
     "도전 시작을 누르세요.";
+
+  /*
+    다음 라운드 진입 전에 저장
+  */
+
+  saveGame();
 
   updateRoundUI();
 
 }
 
 
-/* =========================
+/* =========================================================
    ANNOUNCE
-========================= */
+========================================================= */
 
 function showAnnounce(
   text,
@@ -1954,24 +2692,31 @@ function showAnnounce(
     "show"
   );
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    announceEl.classList.remove(
-      "show"
-    );
+      announceEl.classList.remove(
+        "show"
+      );
 
-  },700);
+    },
+    700
+  );
 
 }
 
 
-/* =========================
+/* =========================================================
    PARTICLES
-========================= */
+========================================================= */
 
 function createParticles(){
 
-  for(let i=0;i<30;i++){
+  for(
+    let i=0;
+    i<30;
+    i++
+  ){
 
     const p =
       document.createElement(
@@ -1998,7 +2743,9 @@ function createParticles(){
     );
 
     document
-      .getElementById("particles")
+      .getElementById(
+        "particles"
+      )
       .appendChild(p);
 
     setTimeout(
@@ -2011,27 +2758,31 @@ function createParticles(){
 }
 
 
-/* =========================
+/* =========================================================
    FINAL
-========================= */
+========================================================= */
 
 function finishGame(){
 
   running = false;
-
   waitingForResult = false;
 
   cancelAnimationFrame(
     animationFrame
   );
 
-  startBtn.disabled = true;
+  startBtn.disabled =
+    true;
 
   resultButtons.classList.add(
     "hidden"
   );
 
-  for(let i=0;i<2;i++){
+  for(
+    let i=0;
+    i<2;
+    i++
+  ){
 
     document.getElementById(
       "finalScore"+i
@@ -2059,7 +2810,8 @@ function finishGame(){
 
     const avg =
       rounds > 0
-        ? totalTimes[i] / rounds
+        ? totalTimes[i] /
+          rounds
         : 0;
 
     document.getElementById(
@@ -2069,6 +2821,7 @@ function finishGame(){
 
   }
 
+
   if(scores[0] > scores[1]){
 
     document.getElementById(
@@ -2077,7 +2830,9 @@ function finishGame(){
       "PLAYER 1이 더 많은 점수를 기록했습니다!";
 
   }
-  else if(scores[1] > scores[0]){
+  else if(
+    scores[1] > scores[0]
+  ){
 
     document.getElementById(
       "resultMessage"
@@ -2094,22 +2849,45 @@ function finishGame(){
 
   }
 
-  setTimeout(() => {
 
-    document
-      .getElementById("endScreen")
-      .classList.add("show");
+  setTimeout(
+    () => {
 
-  },500);
+      endScreen.classList.add(
+        "show"
+      );
+
+    },
+    500
+  );
 
 }
 
 
-/* =========================
+/* =========================================================
+   RESTART
+========================================================= */
+
+document
+  .getElementById("restartBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      clearSave();
+
+      location.reload();
+
+    }
+  );
+
+
+/* =========================================================
    SOUND
-========================= */
+========================================================= */
 
 let audioCtx = null;
+
 
 function beep(
   freq,
@@ -2170,11 +2948,11 @@ function beep(
 }
 
 
-/* =========================
-   INITIAL
-========================= */
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-updateRoundUI();
+setupStartScreen();
 
 </script>
 
